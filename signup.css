@@ -1,0 +1,135 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('images/login/Backgtound.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+}
+
+.text {
+  font-family: arial;
+}
+
+.Wrapper {
+  width: 420px;
+  background: rgba(123, 122, 128, 0.3);
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(95, 95, 95, 0.4);
+  color: white;
+  border-radius: 10px;
+  padding: 30px 40px;
+}
+
+.Wrapper h1 {
+  font-size: 36px;
+  text-align: center;
+}
+
+.Wrapper .input-box {
+  position: relative;
+  width: 95%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  border: 2px solid rgba(214, 214, 214, 0.8);
+  border-radius: 50px;
+  font-size: 16px;
+  color: white;
+  padding-left: 15px;
+}
+
+.input-box input::placeholder {
+  color: white;
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.input-box .lock {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.btn {
+  background-color: white;
+  border: none;
+  width: 100%;
+  height: 45px;
+  font-size: 20px;
+  border-radius: 22.5px;
+  font-weight: 550;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
+
+.btn:hover {
+  background-color: rgb(216, 216, 216);
+  cursor: pointer;
+}
+
+.Wrapper .register{
+  color: white;
+  font-family: arial;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 16px;
+  margin: 20px 0 15px;
+}
+
+.Wrapper a{
+  color: white;
+  text-decoration: none;
+  font-weight: 600px;
+}
+
+.Wrapper a:hover{
+  text-decoration: underline;
+}
+
+.lock {
+  background: transparent;
+  border: none;
+  filter: invert(92%) sepia(0%) saturate(7466%) hue-rotate(42deg) brightness(115%) contrast(108%);
+}
+
+.passwordlock {
+  width: 17px;
+}
+
+.passwordlock:hover {
+  cursor: pointer;
+}
+
+a {
+  font-weight: 550;
+}
+
+@keyframes fadeInShow {
+  0%{
+    opacity: 0;
+    transform: scale(0);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.FadeIn {
+  animation: fadeInShow 0.3s;
+}

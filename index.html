@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register & Email Verification</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="index.css">
+  <script type="module" src="index.js" defer></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+  <!-- Registration Section -->
+  <div class="wrapper" id="wrapper">
+    <form id="registerForm">
+      <h1>Register</h1>
+      <div class="inputbox">
+        <input type="text" placeholder="Username" required class="input" id="usernameInput">
+        <i class='bx bxs-user'></i>
+      </div>
+      <div class="inputbox">
+        <input type="password" placeholder="Password" class="input" id="passwinput">
+        <button type="button" class="Lock" id="lockBtn">
+          <img src="images/buttons/bxs-lock-alt.svg" alt="Lock" class="passlock" id="lock">
+        </button>
+      </div>
+      <div class="check">
+        <input type="checkbox" id="policyCheck">
+        <label for="policyCheck" class="policy">Accept the 
+          <a href="#" id="policyLink">Privacy Policy</a>
+        </label>
+      </div>
+      <button type="button" class="btn" id="registerBtn">Register</button>
+      <p>Already have an account? <a href="Signup.html">Log In</a></p>
+    </form>
+  </div>
+
+  <!-- Email Verification Section -->
+  <div class="container step1">
+    <h2>OTP Verification</h2>
+    <h4>Enter your email address</h4>
+    <p>An OTP will be sent to your email account shortly</p>
+    <div class="form-group">
+      <input type="email" id="emailAdress" placeholder="email">
+    </div>
+    <button class="nextbutton" id="nextBtn">Next &rarr;</button>
+  </div>
+
+  <div class="container step2">
+    <h2>OTP Verification</h2>
+    <h4>Enter one time password</h4>
+    <p>An one time password has been sent to your Email address <span id="VerifyEmail"></span></p>
+    <div class="otp-form">
+      <p>Enter the 4 digit code we sent you via Email to continue</p>
+      <div class="otp-group">
+        <input type="text" maxlength="1" inputmode="numeric">
+        <input type="text" maxlength="1" inputmode="numeric">
+        <input type="text" maxlength="1" inputmode="numeric">
+        <input type="text" maxlength="1" inputmode="numeric">
+      </div>
+      <p>Not your email? / Didn't receive the code? 
+        <a href="#" id="changeEmailBtn">Try again</a>
+      </p>
+    </div>
+    <button class="Verify" id="verifyBtn">Verify &rarr;</button>
+  </div>
+
+  <div class="container step3">
+    <h2>Congratulations</h2>
+    <img src="images/login/Checkmark.png" >
+    <h2>Thank You!</h2>
+    <p>Your OTP verification has been completed succsesfully</p>
+    <br>
+    <p>Go to the <a href="homepage.html">Home Page</a></p>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div class="policyBox" id="policy">
+    <button id="closePolicyBtn">
+      <img src="images/buttons/bxs-x-square.svg" alt="X">
+    </button>
+    <h1>Privacy Policy</h1>
+    <p><strong>Effective Date:</strong> 3/11/2025</p>
+    <p>Welcome to Boblox! We collect minimal data to improve your experience.</p>
+    <h2>What We Collect</h2>
+    <ul>
+      <li><strong>Basic Info:</strong> Username, email.</li>
+      <li><strong>Usage Data:</strong> Game activity, interactions.</li>
+      <li><strong>Technical Info:</strong> Device, browser, cookies.</li>
+    </ul>
+    <h2>How We Use It</h2>
+    <ul>
+      <li>Improve services and security.</li>
+      <li>Provide support and updates.</li>
+      <li>Follow legal requirements.</li>
+    </ul>
+    <h2>Sharing Policy</h2>
+    <ul>
+      <li>We <strong>never</strong> sell data.</li>
+      <li>Limited sharing with service providers and legal authorities if required.</li>
+    </ul>
+    <h2>Your Choices</h2>
+    <ul>
+      <li>Manage cookies via browser settings.</li>
+      <li>Request data access or deletion via <a>WeDontHaveAnEmailYetIThink@gmail.com</a>.</li>
+    </ul>
+    <h2>Security & Updates</h2>
+    <ul>
+      <li>We secure data but recommend keeping credentials safe.</li>
+      <li>Policy updates will be posted here.</li>
+    </ul>
+    <p>For questions, contact <a>WeDontHaveAnEmailYetIThink@gmail.com</a>.</p>
+    <p>Thanks for playing PolyTopia!</p>
+  </div>
+</body>
+</html>

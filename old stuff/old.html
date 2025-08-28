@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="register.css">
+  <script src="register.js" defer></script>
+
+  <title>Register</title>
+
+</head>
+<body>
+  <div class="wrapper" id="wrapper">
+    <form action="https://script.google.com/macros/s/AKfycbwpeKuUtEr2sQ_ESyzPUG5pxMgesDcW9jxs3suiE7F3dLoHrLqkppOkdSsGRYAhNsb5/exec">
+      <h1>Register</h1>
+
+      <div class="inputbox">
+        <input type="text" placeholder="Username" required class="input" name="Username">
+        <i class='bx bxs-user'></i>
+      </div>
+
+      <div class="inputbox">
+        <input type="password" placeholder="Password" class="input" id="passwinput" name="Password">
+        <button class="Lock" type="button" onclick="Unlock()"><img src="images/buttons/bxs-lock-alt.svg" alt="Lock" class="passlock" id="lock"></button>
+      </div>
+
+      <div class="check">
+        <input type="checkbox">
+        <label for="checkbox" class="policy">Accept the
+        <a class="link" href="#" onclick="Policy()">Privacy Policy</a></label>
+      </div>
+      <button class="btn" type="button" onclick="validateForm()">Register</button>
+      <p>Already have an account?<a href="Signup.html">Log In</a></p>
+    </form>
+  </div>
+
+  
+
+  <div class="policyBox" id="policy">
+    <button onclick="ClosePolicy()">
+      <img src="images/buttons/bxs-x-square.svg" alt="X">
+    </button>
+    <h1>Privacy Policy</h1>
+    <p><strong>Effective Date:</strong> 3/11/2025</p>
+
+    <p>Welcome to PolyTopia! We collect minimal data to improve your experience.</p>
+
+    <h2>What We Collect</h2>
+    <ul>
+        <li><strong>Basic Info:</strong> Username, email.</li>
+        <li><strong>Usage Data:</strong> Game activity, interactions.</li>
+        <li><strong>Technical Info:</strong> Device, browser, cookies.</li>
+    </ul>
+
+    <h2>How We Use It</h2>
+    <ul>
+        <li>Improve services and security.</li>
+        <li>Provide support and updates.</li>
+        <li>Follow legal requirements.</li>
+    </ul>
+
+    <h2>Sharing Policy</h2>
+    <ul>
+        <li>We <strong>never</strong> sell data.</li>
+        <li>Limited sharing with service providers and legal authorities if required.</li>
+    </ul>
+
+    <h2>Your Choices</h2>
+    <ul>
+        <li>Manage cookies via browser settings.</li>
+        <li>Request data access or deletion via <a href="mailto:polytopiamail@gmail.com">polytopiamail@gmail.com</a>.</li>
+    </ul>
+
+    <h2>Security & Updates</h2>
+    <ul>
+        <li>We secure data but recommend keeping credentials safe.</li>
+        <li>Policy updates will be posted here.</li>
+    </ul>
+
+    <p>For questions, contact <a href="mailto:polytopiamail@gmail.com">polytopiamail@gmail.com</a>.</p>
+
+    <p>Thanks for playing PolyTopia!</p>
+</div>
+</body>
+</html>
