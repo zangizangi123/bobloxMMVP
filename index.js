@@ -1,6 +1,9 @@
 // ===== Register & Policy Scripts =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import leoProfanity from 'https://cdn.skypack.dev/leo-profanity';
+
+leoProfanity.loadDictionary(); // loads the default English list
 
 const firebaseConfig = { 
   apiKey: "AIzaSyAaxU10m2NHhGbciOMiUfhSrHeks8QujXg",
@@ -55,18 +58,49 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Validate registration form
   function validateForm() {
-    let username = document.getElementById("usernameInput").value.trim();
-    let password = passwInput.value.trim();
-    let checkbox = document.getElementById("policyCheck").checked;
+  const username = document.getElementById("usernameInput").value.trim();
+  const email = document.getElementById("emailAdress").value.trim();
+  const password = document.getElementById("passwinput").value.trim();
 
-   if (username === "" || password === "" || !checkbox) {
-      alert("Please fill in all fields and accept the Privacy Policy.");
-    } else if (password.length < 8) {
-      alert("Password must be at least 8 characters long.");
-    } else {
-      showEmailVerification();
-    }
+  function normalizeLeet(text) {
+  return text
+    .toLowerCase()
+    .replace(/1/g, "i")
+    .replace(/!/g, "i")
+    .replace(/3/g, "e")
+    .replace(/4/g, "a")
+    .replace(/@/g, "a")
+    .replace(/5/g, "s")
+    .replace(/7/g, "t")
+    .replace(/0/g, "o")
+    .replace(/\$/g, "s")
+    .replace(/9/g, "g")
+    .replace(/v/g, "u");
+}
+
+  // username checks
+  if (username.length < 3) {
+    alert("Username must be at least 3 characters long.");
+    return false;
   }
+  const normalized = normalizeLeet(username);
+  if (leoProfanity.check(normalized)) {
+    alert("Username contains inappropriate language.");
+    return false;
+  }
+
+  // password checks
+  if (password.length < 8) {
+    alert("Password must be at least 8 characters long.");
+    return false;
+  }
+
+  showEmailVerification();
+
+  return true; // ✅ all checks passed
+
+
+}
 
   // Show/hide policy modal
   function ClosePolicy() {
@@ -206,5 +240,4 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
 });
