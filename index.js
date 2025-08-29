@@ -59,8 +59,10 @@ window.addEventListener("DOMContentLoaded", () => {
     let password = passwInput.value.trim();
     let checkbox = document.getElementById("policyCheck").checked;
 
-    if (username === "" || password === "" || !checkbox) {
+   if (username === "" || password === "" || !checkbox) {
       alert("Please fill in all fields and accept the Privacy Policy.");
+    } else if (password.length < 8) {
+      alert("Password must be at least 8 characters long.");
     } else {
       showEmailVerification();
     }
@@ -204,4 +206,5 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
 });
