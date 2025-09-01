@@ -5,43 +5,51 @@
   box-sizing: border-box;
 }
 
-body h1 {
-    margin-left: 10px;
-    margin-bottom: 10px;
-    margin-top: 5px;
+body h1,
+body p{
+  padding-top: 5px ;
+  padding-left: 15px;
+  padding-bottom: 5px;
 }
 
-body p {
-    margin-left: 10px;
+
+body.dark-mode {
+  background-color: #121212;
+  color: #f5f5f5;
 }
 
-.container{
-  display: flex;
-  justify-content: center; 
-  align-items: center;     
-  height: 100vh;           
-}
-
+/* Topbar */
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #1e1e1e; /* dark background */
+  background-color: #1e1e1e;
   color: white;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-.a {
-    text-decoration: none;
+.left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.topbar .Boblox,
-.topbar .logout  {
-    text-decoration: none;
-  padding: 5px 12px;
+.topbar .Boblox {
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+
+.topbar .logout {
+  text-decoration: none;
+  padding: 10px 15px;
+  margin: 15px 0;
   border: none;
   border-radius: 5px;
   background: none;
@@ -50,26 +58,77 @@ body p {
   font-weight: 600;
 }
 
-.topbar .Boblox:hover,
-.topbar .logout:hover {
+.menu {
+  background: none;
+  border: none;
   cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (max-width: 600px) {
-  .topbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.menu img {
+  width: 100%;
+  height: auto;
+  filter: brightness(0) saturate(100%) invert(98%) sepia(86%) saturate(2%) hue-rotate(22deg) brightness(106%) contrast(101%);
 }
 
-.inputbox i{
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #1e1e1e;
   color: white;
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+  transition: left 0.3s ease;
+  z-index: 1001;
 }
 
+.sidebar.active {
+  left: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 20px 0;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+}
+
+.sidebar ul li a:hover {
+  color: #f5a623;
+}
+
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 200px);
+}
 
 .confirm {
   width: 420px;
@@ -80,11 +139,6 @@ body p {
   border-radius: 10px;
   padding: 30px 40px;
 }
-.confirm h1 {
-  font-size: 36px;
-  text-align: center;
-  color: white;
-}
 
 .btn {
   margin-top: 20px;
@@ -94,67 +148,62 @@ body p {
   border: none;
   border-radius: 30px;
   font-size: 20px;
-  font-weight: 550;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-}
-
-.btn.yes:hover {
-  box-shadow: 0 0 10px rgba(235, 64, 52, .5);
-  background-color: rgb(245, 162, 157);
-}
-
-.btn.no:hover {
-  box-shadow: 0 0 10px rgba(72, 255, 61, .5);
-  background-color: rgb(162, 250, 157);
-}
-
-
-.btn:hover {
-  background-color: rgb(216, 216, 216);
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
   cursor: pointer;
 }
 
-.inputbox i{
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+.sidebar ul li a,
+.sidebar ul li button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-weight: 600;
   color: white;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: arial, sans-serif;
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 200px);      
+.sidebar ul li button:hover,
+.sidebar ul li a:hover {
+  color: #adadad;
 }
+
+.btn.yes:hover { background-color: rgb(245, 162, 157); }
+.btn.no:hover { background-color: rgb(162, 250, 157); }
+
 
 @keyframes fadeInShow {
-  0%{
+  0% {
     opacity: 0;
     transform: scale(0);
   }
-  100%{
+  100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
   }
 }
 
 .FadeIn {
-  animation: fadeInShow 0.3s;
-}
-
-@keyframes fadeOut {
-  0%{
-    opacity: 1;
-    transform: scale(1);
-  }
-  100%{
-    opacity: 0;
-    transform: scale(0);
-  }
+  animation: fadeInShow 0.3s forwards;
 }
 
 .FadeOut {
-  animation: fadeOut 0.3s;
+  animation: fadeOut 0.3s forwards;
 }

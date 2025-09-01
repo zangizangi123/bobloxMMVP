@@ -1,31 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <script type="module" src="homepage.js" defer></script>
+    <script type="module" src="homepage.js" defer></script>
     <link rel="stylesheet" href="homepage.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
 <body>
     <div id="content">
-        <header class ="topbar">
-            <a class="Boblox" href="homepage.html">Boblox</a>
-            <a class="logout">Logout</a>
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="left">
+                <button id="openSidebar" class="menu">
+                    <img src="images/buttons/menu-wide.png" alt="Menu" />
+                </button>
+                <a class="Boblox" href="homepage.html">Boblox</a>
+            </div>  
         </header>
 
         <h1 id="hello">Hello, </h1>
         <p>Nothing else to see</p>
-
-        
     </div>
 
-    <div class="container">
-          <div class="confirm" id="confirm">
-             <h2>Are you sure you want to logout?</h2>
-              <button class="btn yes">Yes</button>
-             <button class="btn no">No</button>
-          </div>
-        </div>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" id="closeSidebar">&times;</button>
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="homepage.html">Home</a></li>
+            <li><a href="#" class="logout" id="logout" >Logout</a></li>
+            <li><button id="darkModeToggle" class="darkmode">Dark Mode</button></li>
+        </ul>
+    </div>
 
+    <!-- Logout Confirmation -->
+    <div class="container">
+        <div class="confirm" id="confirm">
+            <h2>Are you sure you want to logout?</h2>
+            <button class="btn yes">Yes</button>
+            <button class="btn no">No</button>
+        </div>
+    </div>
 </body>
 </html>

@@ -54,9 +54,7 @@ async function saveUserToFirebase(username, email, password, otp) {
   }
 }
 
-// Wait for DOM content to be loaded
 window.addEventListener("DOMContentLoaded", () => {
-  // DOM elements
   const policy = document.getElementById("policy");
   const wrapper = document.getElementById("wrapper");
   const lockBtn = document.getElementById("lockBtn");
@@ -71,13 +69,16 @@ window.addEventListener("DOMContentLoaded", () => {
         emailadress = document.getElementById("emailAdress"),
         verifyemail = document.getElementById("VerifyEmail"),
         inputs = document.querySelectorAll(".otp-group input"),
-        nextbutton = document.getElementById("nextBtn"),
         verifybutton = document.getElementById("verifyBtn"),
         changeEmailBtn = document.getElementById("changeEmailBtn");
 
   let OTP = "";
 
-  // ===== Functions =====
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  if (isLoggedIn == "true") {
+    window.location.href = "homepage.html"; // back to login
+  }
+
 
   // Toggle password visibility
   function Unlock() {
@@ -158,17 +159,21 @@ window.addEventListener("DOMContentLoaded", () => {
       return false;
     }
 
-    return true; // Passed all checks
+    const currentUserEmail = email
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("currentUserEmail", currentUserEmail);
+
+    return true; 
   }
 
-  // ===== Event Listeners =====
+
   if (lockBtn) lockBtn.addEventListener("click", Unlock);
   if (policyLink) policyLink.addEventListener("click", (e) => { e.preventDefault(); Policy(); });
   if (closePolicyBtn) closePolicyBtn.addEventListener("click", ClosePolicy);
   if (changeEmailBtn) changeEmailBtn.addEventListener("click", (e) => { e.preventDefault(); changeMyEmail(); });
   if (emailadress) emailadress.addEventListener("input", (e) => ValidateEmail(e.target.value));
 
-  // ===== Register button logic =====
+
   if (registerBtn) {
     registerBtn.addEventListener("click", async () => {
       if (!validateForm()) return;
@@ -209,7 +214,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ===== OTP Inputs logic =====
+
   if (inputs && verifybutton) {
     inputs.forEach((input, index) => {
       input.addEventListener("input", (e) => {
@@ -225,7 +230,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ===== Verify OTP =====
+
   if (verifybutton) {
     verifybutton.addEventListener("click", () => {
       let values = "";
