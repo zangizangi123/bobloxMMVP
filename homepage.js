@@ -74,7 +74,7 @@ document.querySelector(".no").addEventListener("click", () => {
 document.querySelector(".yes").addEventListener("click", () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("currentUserEmail");
-    window.location.href = "index.html";
+    window.location.href = "register.html";
 });
 
 // Fetch username from Firebase

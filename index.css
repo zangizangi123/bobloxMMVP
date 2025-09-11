@@ -1,4 +1,3 @@
-
 * {
   margin: 0;
   padding: 0;
@@ -7,30 +6,77 @@
 }
 
 body {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  font-family: arial;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: url(images/login/Backgtound.jpg);
-  background-size: cover;
-  background-position: center;
+  background-color: #121212;
 }
 
 h1 {
   font-family: arial;
 }
 
+.top {
+  display: flex;
+  height: 500px;
+  background: url(images/login/serenity-in-simplicity-s4lppaqo5zq49v0g.jpg)  no-repeat top right ;
+  align-items: center;
+  justify-content: space-between;
+  background-size: cover;
+}
+
+
+.text {
+    display: flex;
+    align-self: flex-start;
+    margin-left: 100px;
+    margin-top: 100px;
+    flex-direction: column;
+}
+
+.text h3 {
+    color: #d8d8d8;
+}
+.text h1 {
+    color: white;
+}
+
+.green{
+    color: rgb(83, 255, 98);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1e1e1e;
+  color: white;
+  position: sticky;
+  top: 0;
+  height: 55px;
+  z-index: 1000;
+}
+
+.topbar .Boblox {
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
 .wrapper {
-  width: 420px;
-  background: rgba(123, 122, 128, 0.3);
+  width: 520px;
+  background: rgba(53, 53, 54, 0.7);
   backdrop-filter: blur(25px);
   border: 2px solid rgba(95, 95, 95, 0.4);
   color: white;
   border-radius: 10px;
   padding: 30px 40px;
+  margin-right: 100px;
+}
+
+.discover h1{
+    color: white;
+    font-size: 36px;
 }
 .wrapper h1 {
   font-size: 36px;
@@ -38,9 +84,18 @@ h1 {
   color: white;
 }
 
+.discover h2{
+  color: white;
+}
+.wrapper h2 {
+  text-align: center;
+  color: white;
+}
+
+
 .wrapper .inputbox {
   position: relative;
-  width: 95%;
+  width: 100%;
   height: 50px;
   margin: 30px 0;
 }
@@ -48,9 +103,9 @@ h1 {
 .wrapper .input {
   width: 100%;
   height: 100%;
-  border-radius: 50px;
-  background: transparent;
-  border: 2px solid rgba(214, 214, 214, 0.9);
+  border-radius: 15px;
+  background: rgba(66, 66, 66, 0.6);
+  border: none;
   padding-left: 15px;
   color: white;
   outline: none;
@@ -80,260 +135,27 @@ label {
 }
 
 .btn {
-  margin-top: 20px;
-  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 20px;
   height: 45px;
-  background-color: white;
+  background-color: rgb(83, 255, 98);
   border: none;
-  border-radius: 30px;
+  border-radius: 15px;
   font-size: 20px;
   font-weight: 550;
   box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+  color: white;
+}
+
+.wrapper .btn {
+    width: 100%;
 }
 
 .btn:hover {
-  background-color: rgb(216, 216, 216);
+  background-color: rgb(64, 204, 75);
   cursor: pointer;
 }
 
-.Lock {
-  filter: invert(92%) sepia(0%) saturate(7466%) hue-rotate(42deg) brightness(115%) contrast(108%);
-  position: absolute;
-  top: 50%;
-  right: 17px;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  padding: 0;
-  width: auto; /* don't inherit full width */
-  height: auto; /* let image define height */
-  cursor: pointer;
-}
-
-.passlock {
-  display: block; /* removes inline spacing issues */
-  width: 17px;    /* your desired size */
-  height: auto;
-}
-
-
-.passlock:hover {
-  cursor: pointer;
-}
-
-.check {
-  padding-left: 15px;
-  display: inline-flex;
-  align-items: center;
-}
-
-input[type="checkbox"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  margin: 0;
-  font: inherit;
-  color: currentColor;
-  width: 1.15em;
-  height: 1.15em;
-  border: 0.15em solid white;
-  border-radius: 0.15em;
-  transform: translateY(-0.075em);
-  display: grid;
-  place-content: center;
-  margin-right: 10px;
-}
-
-input[type="checkbox"]::before {
-  content: "";
-  width: 0.65em;
-  height: 0.65em;
-  transform: scale(0);
-  transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em var(--form-control-color);
-  background-color: white;
-  transform-origin: bottom left;
-  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-
-input[type="checkbox"]:checked::before {
-  transform: scale(1);
-}
-
-/* ===== Email Verification Styles ===== */
-.container {
-  background: rgba(123, 122, 128, 0.3);
-  backdrop-filter: blur(25px);
-  border: 2px solid rgba(95, 95, 95, 0.4);
-  color: white;
-  width: 420px;
-  border-radius: 10px;
-  padding: 25px;
-  text-align: center;
-  animation: fadeInShow 0.5s;
-}
-
-.form-group {
-  margin: 20px 0;
-  text-align: start;
-}
-
-.form-group input{
-  background: none;
-  font-size: 15px;
-  padding: 15px;
-  border: 1px solid lightgrey;
-  border-radius: 35px;
-  color: white;
-  width: 100%;
-  height: 45px;
-  outline: none;
-}
-
-.otp-form{
-  display: block;
-  margin: 20px 0;
-}
-
-.otp-form p{
-  color: rgb(255, 255, 255);
-  font-weight: 550;
-}
-
-.otp-group{
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  margin: 20px;
-}
-
-.otp-group input{
-  width: 50px;
-  height: 50px;
-  outline: none;
-  font-size: 25px;
-  padding: 15px;
-  border: none;
-  border-bottom: 2px solid lightgrey;
-  background: transparent;
-  color: white;
-}
-
-.otp-group input::placeholder {
-  color: white;
-  font-family: arial;
-  font-weight: 550;
-}
-
-input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-img {
-  height: 150px;
-  margin: 0;
-}
-
-button {
-  width: 100%;
-  height: 45px;
-  background-color: white;
-  border-radius: 30px;
-  border: none;
-  font-size: 20px;
-  color: black;
-  cursor: pointer;
-  margin-bottom: 20px;
-  font-family: arial;
-  font-weight: 550;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-}
-
-button.disable {
-  opacity: 0.6;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* ===== Policy Box ===== */
-.policyBox {
-  width: 420px;
-  background: rgba(123, 122, 128, 0.3);
-  backdrop-filter: blur(25px);
-  border: 2px solid rgba(95, 95, 95, 0.4);
-  color: white;
-  border-radius: 10px;
-  padding: 10px 60px;
-  display: none;
-  position: relative;
-}
-
-.policyBox button{
-  display: block;
-  background: none;
-  filter: invert(92%) sepia(0%) saturate(7466%) hue-rotate(42deg) brightness(115%) contrast(108%);
-  border: none;
-  margin: 0px 0;
-  position: absolute;
-  top: 10px;      /* adjust to where you want it */
-  right: 10px;
-  background: transparent;
-  border: none;
-  padding: 0;
-  width: auto;
-  height: auto;
-  cursor: pointer;
-}
-
-.policyBox button:hover{
-  cursor: pointer;
-}
-
-.policyBox button img {
-  display: block;
-  width: 25px;    /* adjust size */
-  height: auto;
-}
-
-
-/* ===== Animations ===== */
-@keyframes fadeInShow {
-  0%{
-    opacity: 0;
-    transform: scale(0);
-  }
-  100%{
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.FadeIn {
-  animation: fadeInShow 0.3s;
-}
-
-.error-shake{
-  animation: shake 0.2s ease-in-out 0s 2;
-}
-
-@keyframes shake {
-  0%{
-    margin-left: 0rem;
-  }
-  25%{
-    margin-left: 0.5rem;
-  }
-  75%{
-    margin-left: -0.5rem;
-  }
-  100%{
-    margin-left: 0rem;
-  }
-}
-
-/* ===== Links ===== */
 a {
   color: white;
   text-decoration: none;
@@ -345,9 +167,92 @@ a:hover {
   cursor: pointer;
 }
 
-.step1, .step2, .step3 {
-  display: none;
+.part-1 {
+    height: 500px;
+    display: flex;
+    margin-top: 155px;
+    margin-left: 100px;
+    justify-content: space-between;
+    align-items: flex-start;
 }
-.step1.active, .step2.active, .step3.active {
-  display: block;
+
+.part-1 .text {
+    display: flex;
+    flex-direction: column; /* stack children vertically */
+    justify-content: flex-start;/* align children to the left of the container */
 }
+
+.part-1 h3 {
+    color: #d8d8d8;
+}
+
+.discover img {
+    height: 40vh;
+    width: auto;
+}
+
+.part-1 img {
+    margin-right: 180px;
+}
+
+.part-2 img {
+    margin-left: 60px;
+}
+
+.part-2 {
+    height: 500px;
+    display: flex;
+    margin-top: 155px;
+    margin-left: 100px;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.part-2 .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-right: 180px;
+}
+
+.purple {
+  color: rgb(245, 20, 245);
+}
+.Join .btn{
+  width: 150px;
+}
+
+.Join {
+  display: flex;
+  align-items: center;
+  height: 250px;
+  background-color: rgb(40, 115, 255);
+}
+
+.Contents {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.Contents .btn{
+  margin-top: 15px;
+}
+
+p {
+  font-size: 20px;
+  font-weight: 300;
+  color: #d8d8d8;
+}
+
+.end {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 50px;
+  color: white;
+}
+

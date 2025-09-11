@@ -1,0 +1,362 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: arial;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  font-family: arial;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url(images/login/Backgtound.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+h1 {
+  font-family: arial;
+}
+
+
+
+.wrapper {
+  width: 520px;
+  background: rgba(53, 53, 54, 0.7);
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(39, 39, 39, 0.4);
+  color: white;
+  border-radius: 10px;
+  padding: 30px 40px;
+}
+.wrapper h1 {
+  font-size: 36px;
+  text-align: center;
+  color: white;
+}
+
+.wrapper h2 {
+  text-align: center;
+  color: white;
+}
+
+
+.wrapper .inputbox {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.wrapper .input {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  background: rgba(66, 66, 66, 0.6);
+  border: none;
+  padding-left: 15px;
+  color: white;
+  outline: none;
+}
+
+.wrapper .input::placeholder {
+  color: white;
+  font-size: 16px;
+}
+
+.inputbox i{
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+}
+
+label {
+  color: white;
+  text-align: top;
+}
+
+.wrapper p {
+  color: white;
+  text-align: center;
+}
+
+.btn {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 45px;
+  background-color: rgb(83, 255, 98);
+  border: none;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 550;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+  color: white;
+}
+
+.btn:hover {
+  background-color: rgb(64, 204, 75);
+  cursor: pointer;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  font-weight: 650;
+}
+
+a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.Lock {
+  filter: invert(92%) sepia(0%) saturate(7466%) hue-rotate(42deg) brightness(115%) contrast(108%);
+  position: absolute;
+  top: 50%;
+  right: 17px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto; 
+  height: auto; 
+  cursor: pointer;
+}
+
+.passlock {
+  display: block; 
+  width: 17px;    
+  height: auto;
+}
+
+
+.passlock:hover {
+  cursor: pointer;
+}
+
+.check {
+  padding-left: 15px;
+  display: inline-flex;
+  align-items: center;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid white;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+  margin-right: 10px;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  background-color: white;
+  transform-origin: bottom left;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+
+.container {
+  background: rgba(53, 53, 54, 0.7);
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(39, 39, 39, 0.4);
+  color: white;
+  width: 420px;
+  border-radius: 10px;
+  padding: 25px;
+  text-align: center;
+  animation: fadeInShow 0.5s;
+}
+
+.form-group {
+  margin: 20px 0;
+  text-align: start;
+}
+
+.form-group input{
+  background: none;
+  font-size: 15px;
+  padding: 15px;
+  border: 1px solid lightgrey;
+  border-radius: 35px;
+  color: white;
+  width: 100%;
+  height: 45px;
+  outline: none;
+}
+
+.otp-form{
+  display: block;
+  margin: 20px 0;
+}
+
+.otp-form p{
+  color: rgb(255, 255, 255);
+  font-weight: 550;
+}
+
+.otp-group{
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  margin: 20px;
+}
+
+.otp-group input{
+  width: 50px;
+  height: 50px;
+  outline: none;
+  font-size: 25px;
+  padding: 15px;
+  border: none;
+  border-bottom: 2px solid lightgrey;
+  background: transparent;
+  color: white;
+}
+
+.otp-group input::placeholder {
+  color: white;
+  font-family: arial;
+  font-weight: 550;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+img {
+  height: 150px;
+  margin: 0;
+}
+
+button {
+  width: 100%;
+  height: 45px;
+  background-color: white;
+  border-radius: 15px;
+  border: none;
+  font-size: 20px;
+  color: black;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-family: arial;
+  font-weight: 550;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
+
+button.disable {
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+}
+
+.policyBox {
+  width: 420px;
+  background: rgba(123, 122, 128, 0.3);
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(95, 95, 95, 0.4);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 60px;
+  display: none;
+  position: relative;
+}
+
+.policyBox button{
+  display: block;
+  background: none;
+  filter: invert(92%) sepia(0%) saturate(7466%) hue-rotate(42deg) brightness(115%) contrast(108%);
+  border: none;
+  margin: 0px 0;
+  position: absolute;
+  top: 10px;      
+  right: 10px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+}
+
+.policyBox button:hover{
+  cursor: pointer;
+}
+
+.policyBox button img {
+  display: block;
+  width: 25px;    
+  height: auto;
+}
+
+
+
+@keyframes fadeInShow {
+  0%{
+    opacity: 0;
+    transform: scale(0);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.FadeIn {
+  animation: fadeInShow 0.3s;
+}
+
+.error-shake{
+  animation: shake 0.2s ease-in-out 0s 2;
+}
+
+@keyframes shake {
+  0%{
+    margin-left: 0rem;
+  }
+  25%{
+    margin-left: 0.5rem;
+  }
+  75%{
+    margin-left: -0.5rem;
+  }
+  100%{
+    margin-left: 0rem;
+  }
+}
+
+
+.step1, .step2, .step3 {
+  display: none;
+}
+.step1.active, .step2.active, .step3.active {
+  display: block;
+}

@@ -1,120 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Register & Email Verification</title>
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  <link rel="stylesheet" href="index.css">
-  <script type="module" src="index.js" defer></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script type="module">import leoProfanity from 'https://cdn.skypack.dev/leo-profanity';</script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js" defer></script>
+    <title>Welcome To Boblox</title>
 </head>
 <body>
-  <!-- Registration Section -->
-  <div class="wrapper" id="wrapper">
-    <form id="registerForm" >
-      <h1>Register</h1>
-      <div class="inputbox">
-        <input type="text" placeholder="Username" required class="input" id="usernameInput">
-        <i class='bx bxs-user'></i>
-      </div>
-      <div class="inputbox">
-        <input type="password" placeholder="Password" class="input" id="passwinput">
-        <button type="button" class="Lock" id="lockBtn">
-          <img src="images/buttons/bxs-lock-alt.svg" alt="Lock" class="passlock" id="lock">
-        </button>
-      </div>
-      <div class="inputbox">
-        <input type="email" class="input" id="emailAdress" placeholder="email">
-        <i class='bx  bx-at'></i> 
-      </div>
-      <div class="check">
-        <input type="checkbox" id="policyCheck">
-        <label for="policyCheck" class="policy">Accept the 
-          <a href="#" id="policyLink">Privacy Policy</a>
-        </label>
-      </div>
-      <button type="button" class="btn" id="registerBtn">Register</button>
-      <p>Already have an account? <a href="LogIn.html">Log In</a></p>
-    </form>
-  </div>
+    <header class="topbar">
+        <a class="Boblox" href="index.html">Boblox</a>
+    </header>
 
-  <!-- Email Verification Section -->
-  <div class="container step1">
-    <h2>OTP Verification</h2>
-    <h4>Enter your email address</h4>
-    <p>An OTP will be sent to your email account shortly</p>
-    <div class="form-group">
-      
+    <div class="top">
+        <div class="text">
+            <h1> Join a community, meet new people!</h1>
+            <h3> In Boblox, you can build and explore a lot of unique games, each custom made from the community! </h3>
+            <h3> Customize your avatar and make your own creations!</h3>
+        </div>
+
+        <div class="wrapper" id="wrapper">
+            <form id="registerForm" >
+                <h2>Create an account for FREE to not miss out on the fun!</h2>
+                <div class="inputbox">
+                    <input type="text" placeholder="Username" required class="input" id="usernameInput">
+                    <i class='bx bxs-user'></i>
+                </div>
+                <button type="button" class="btn" id="registerBtn" onclick="saveInput()">
+                    &#9654; Register
+                </button>
+                <p>Already have an account? <a href="LogIn.html">Log In</a></p>
+            </form>
+        </div>
     </div>
-    <button class="nextbutton" id="nextBtn">Next &rarr;</button>
-  </div>
+    <div class="discover">
+        <div class="part-1">
+            <div class="text">
+                <h1><span class="green">Play</span> the games made by our community!</h1>
+                <h3>Play the games our online comunity made (still W.I.P).</h3>
+            </div>
+            <img src="images/elementor-placeholder-image.png">
+        </div>
 
-  <div class="container step2">
-    <h2>OTP Verification</h2>
-    <h4>Enter one time password</h4>
-    <p>An one time password has been sent to your Email address <span id="VerifyEmail"></span></p>
-    <div class="otp-form">
-      <p>Enter the 4 digit code we sent you via Email to continue</p>
-      <div class="otp-group">
-        <input type="text" maxlength="1" inputmode="numeric">
-        <input type="text" maxlength="1" inputmode="numeric">
-        <input type="text" maxlength="1" inputmode="numeric">
-        <input type="text" maxlength="1" inputmode="numeric">
-      </div>
-      <p>Not your email? / Didn't receive the code? 
-        <a href="#" id="changeEmailBtn">Try again</a>
-      </p>
+        <div class="part-2">
+            <img src="images/elementor-placeholder-image.png">
+            <div class="text">
+                <h1><span class="purple">Meet</span> new people!</h1>
+                <h3>Boblox is a great place to meet and chat with other players! <p>What are you waiting for? <a href="register.html">Join in on the fun!</a></p> </h3>
+            </div>
+        </div>
+
+        <div class="Join">
+            <div class="Contents">
+               <h1>Join Boblox today</h1>
+                <button class="btn" onclick="join()"> <i class='bx bxs-user'></i> Join Now!</button> 
+                <p>(completly FREE btw)</p>
+            </div>
+        </div>
+
+        <div class="end">
+            <h4>© Boblox 2025</h4>
+        </div>
     </div>
-    <button class="Verify" id="verifyBtn">Verify &rarr;</button>
-  </div>
-
-  <div class="container step3">
-    <h2>Congratulations</h2>
-    <img src="images/login/Checkmark.png" >
-    <h2>Thank You!</h2>
-    <p>Your OTP verification has been completed succsesfully</p>
-    <br>
-    <p>Go to the <a href="homepage.html">Home Page</a></p>
-  </div>
-
-  <!-- Privacy Policy Modal -->
-  <div class="policyBox" id="policy">
-    <button id="closePolicyBtn">
-      <img src="images/buttons/bxs-x-square.svg" alt="X">
-    </button>
-    <h1>Privacy Policy</h1>
-    <p><strong>Effective Date:</strong> 3/11/2025</p>
-    <p>Welcome to Boblox! We collect minimal data to improve your experience.</p>
-    <h2>What We Collect</h2>
-    <ul>
-      <li><strong>Basic Info:</strong> Username, email.</li>
-      <li><strong>Usage Data:</strong> Game activity, interactions.</li>
-      <li><strong>Technical Info:</strong> Device, browser, cookies.</li>
-    </ul>
-    <h2>How We Use It</h2>
-    <ul>
-      <li>Improve services and security.</li>
-      <li>Provide support and updates.</li>
-      <li>Follow legal requirements.</li>
-    </ul>
-    <h2>Sharing Policy</h2>
-    <ul>
-      <li>We <strong>never</strong> sell data.</li>
-      <li>Limited sharing with service providers and legal authorities if required.</li>
-    </ul>
-    <h2>Your Choices</h2>
-    <ul>
-      <li>Manage cookies via browser settings.</li>
-      <li>Request data access or deletion via <a>WeDontHaveAnEmailYetIThink@gmail.com</a>.</li>
-    </ul>
-    <h2>Security & Updates</h2>
-    <ul>
-      <li>We secure data but recommend keeping credentials safe.</li>
-      <li>Policy updates will be posted here.</li>
-    </ul>
-    <p>For questions, contact <a>WeDontHaveAnEmailYetIThink@gmail.com</a>.</p>
-    <p>Thanks for playing PolyTopia!</p>
-  </div>
 </body>
 </html>
