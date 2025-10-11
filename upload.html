@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Your Game</title>
+    <link rel="stylesheet" href="upload.css">
+</head>
+<body>
+
+<div class="Upload">
+    <h1>Upload Your Game</h1>
+    <form id="uploadForm" class="form">
+        <input id="gameName" placeholder="Game Name" required>
+        <textarea id="gameDesc" placeholder="Description" required></textarea>
+        <label>Game Icon (PNG)</label>
+        <input id="gameIcon" type="file" accept=".png," required>
+        <label>Game File (PCK)</label>
+        <input id="gameFile" type="file" accept=".pck," required>
+        <button type="submit">Upload Game</button>
+
+        <h3>Don't know how to upload games?</h3><a href="https://bobloxrebooted.blogspot.com/2025/10/how-to-upload-games-on-boblox-greetings.html">Learn here!</a>
+    </form>
+</div>
+
+<!-- Load JS as module -->
+<script type="module" src="upload.js"></script>
+</body>
+</html>

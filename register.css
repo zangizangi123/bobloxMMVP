@@ -14,7 +14,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url(images/login/Backgtound.jpg);
+  background: url(images/blue.jpg);
   background-size: cover;
   background-position: center;
 }
@@ -252,7 +252,7 @@ input::-webkit-outer-spin-button {
   margin: 0;
 }
 
-img {
+.wrapper img {
   height: 150px;
   margin: 0;
 }
@@ -280,9 +280,9 @@ button.disable {
 
 .policyBox {
   width: 420px;
-  background: rgba(123, 122, 128, 0.3);
+  background: rgba(53, 53, 54, 0.7);
   backdrop-filter: blur(25px);
-  border: 2px solid rgba(95, 95, 95, 0.4);
+  border: 2px solid rgba(39, 39, 39, 0.4);
   color: white;
   border-radius: 10px;
   padding: 10px 60px;
@@ -359,4 +359,32 @@ button.disable {
 }
 .step1.active, .step2.active, .step3.active {
   display: block;
+}
+
+.img2 img {
+  position: fixed;      /* or absolute if inside a positioned container */
+  bottom: 0;
+  left: 0;
+  height: 50vh;
+  width: auto;
+  margin: 0;
+  margin-left: 30px;
+}
+
+.Lock {
+  all: unset; /* clears inherited button styles */
+  position: absolute;
+  top: 50%;
+  right: 17px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  filter: invert(92%) sepia(0%) saturate(7466%) hue-rotate(42deg) brightness(115%) contrast(108%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  width: auto;
+  height: auto;
 }
