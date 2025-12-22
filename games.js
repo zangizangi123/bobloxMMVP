@@ -6,7 +6,7 @@ const firebaseConfig = {
     authDomain: "bobloxauth2.firebaseapp.com",
     databaseURL: "https://bobloxauth2-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "bobloxauth2",
-    storageBucket: "bobloxauth2.firebased.app",
+    storageBucket: "bobloxauth2.firebased.appspot.com",
     messagingSenderId: "302659528234",
     appId: "1:302659528234:web:ce6b02d848a991fc0c0553"
 };
@@ -14,23 +14,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function emailToKey(email) {
-    return email.replace(/\./g, "_");
-}
+const gamesContainer = document.getElementById("games");
 
-window.addEventListener("DOMContentLoaded", () => {
-    // Check login
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if(isLoggedIn !== "true") window.location.href = "index.html";
-
-    // Dark mode on load
-    if(localStorage.getItem("darkMode") === "enabled") {
-        document.body.classList.add("dark-mode");
-        darkModeToggle.textContent = "Light Mode";
-    }
-});
-
-// Sidebar & logout elements
+// --- Sidebar / Dark Mode ---
 const sidebar = document.getElementById("sidebar");
 const openSidebarBtn = document.getElementById("openSidebar");
 const closeSidebarBtn = document.getElementById("closeSidebar");
@@ -43,15 +29,21 @@ const logoutBtn = document.getElementById("logout");
 openSidebarBtn.addEventListener("click", () => sidebar.classList.add("active"));
 closeSidebarBtn.addEventListener("click", () => sidebar.classList.remove("active"));
 
-// Dark mode toggle
+// Dark mode on load
+if(localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    darkModeToggle.textContent = "Light Mode";
+}
+
 darkModeToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
     localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
     darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
 });
 
-// Logout confirmation
+// Logout
 confirm.style.display = "none";
+
 logoutBtn.addEventListener("click", () => {
     confirm.style.display = "block";
     content.style.filter = "blur(10px)";
@@ -77,15 +69,36 @@ document.querySelector(".yes").addEventListener("click", () => {
     window.location.href = "register.html";
 });
 
-// Fetch username
-const currentEmail = localStorage.getItem("currentUserEmail");
-if(currentEmail) {
-    const emailKey = emailToKey(currentEmail);
-    const userRef = ref(db, `users/${emailKey}`);
-    get(userRef).then(snapshot => {
-        if(snapshot.exists()) {
-            const username = snapshot.val().username;
-            document.getElementById("hello").textContent = `Hello, ${username}`;
-        }
-    }).catch(console.error);
+// --- Load Games ---
+async function loadGames() {
+    const snapshot = await get(ref(db, "games"));
+    if(!snapshot.exists()) {
+        gamesContainer.innerHTML = "<p>No games yet.</p>";
+        return;
+    }
+
+    const games = snapshot.val();
+    gamesContainer.innerHTML = "";
+
+    for(const id in games) {
+        const game = games[id];
+        const div = document.createElement("div");
+        div.className = "game";
+
+        div.innerHTML = `
+            <img src="${game.icon}" alt="${game.name}">
+            <h2>${game.name}</h2>
+            <div class="creator">by ${game.creator}</div>
+            <p>${game.description}</p>
+            <button class="btn play-btn">▶ Play</button>
+        `;
+
+        div.querySelector(".play-btn").addEventListener("click", () => {
+            window.location.href = `boblox://launch?game=${game.id}`;
+        });
+
+        gamesContainer.appendChild(div);
+    }
 }
+
+loadGames();
