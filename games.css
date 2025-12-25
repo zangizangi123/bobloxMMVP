@@ -1,4 +1,4 @@
-/* --- General resets --- */
+/* -------------------- General Resets -------------------- */
 * {
     margin: 0;
     padding: 0;
@@ -12,52 +12,67 @@ body {
     min-height: 100vh;
 }
 
-/* --- Dark Mode --- */
 body.dark-mode {
     background-color: #f5f5f5;
     color: #121212;
 }
 
-/* --- Topbar --- */
+/* -------------------- Topbar -------------------- */
 .topbar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 10px 20px;
     background-color: #1e1e1e;
+    height: 55px;
     position: sticky;
     top: 0;
     z-index: 1000;
-    height: 55px;
 }
 
 body.dark-mode .topbar {
     background-color: #e0e0e0;
 }
 
-.topbar .menu {
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topbar-left .menu {
     background: none;
     border: none;
     cursor: pointer;
-    margin-right: 20px;
 }
 
-.topbar .menu img {
+.topbar-left .menu img {
     width: 30px;
     height: 30px;
 }
 
-.topbar .Boblox {
-    color: white;
-    font-weight: 600;
-    text-decoration: none;
+.topbar-left .Boblox {
     font-size: 20px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
 }
 
 body.dark-mode .Boblox {
     color: #121212;
 }
 
-/* --- Sidebar --- */
+.topbar-right .bobux {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+}
+
+body.dark-mode .topbar-right .bobux {
+    color: #121212;
+}
+
+/* -------------------- Sidebar -------------------- */
 .sidebar {
     position: fixed;
     top: 0;
@@ -71,27 +86,39 @@ body.dark-mode .Boblox {
     z-index: 1001;
 }
 
+.sidebar.active {
+    left: 0;
+}
+
 body.dark-mode .sidebar {
     background-color: #e0e0e0;
     color: #121212;
 }
 
-.sidebar.active { left: 0; }
-
 .sidebar .close-btn {
     background: none;
     border: none;
-    color: white;
     font-size: 30px;
+    color: white;
     cursor: pointer;
     margin-bottom: 20px;
 }
 
-body.dark-mode .sidebar .close-btn { color: #121212; }
+body.dark-mode .sidebar .close-btn {
+    color: #121212;
+}
 
-.sidebar ul { list-style: none; padding: 0; }
-.sidebar ul li { margin: 15px 0; }
-.sidebar ul li a, .sidebar ul li button {
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a,
+.sidebar ul li button {
     display: block;
     text-decoration: none;
     color: white;
@@ -102,21 +129,44 @@ body.dark-mode .sidebar .close-btn { color: #121212; }
 }
 
 body.dark-mode .sidebar ul li a,
-body.dark-mode .sidebar ul li button { color: #121212; }
+body.dark-mode .sidebar ul li button {
+    color: #121212;
+}
 
 .sidebar ul li a:hover,
-.sidebar ul li button:hover { color: #adadad; }
+.sidebar ul li button:hover {
+    color: #adadad;
+}
 
-/* --- Discover Section --- */
+.sidebar .darki {
+    display: block;
+    font-size: 15px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+body.dark-mode .sidebar .darki {
+    color: #121212;
+}
+
+/* -------------------- Discover Section -------------------- */
 .discover {
     padding: 40px 20px 20px;
     text-align: left;
 }
 
-.discover h1 { font-size: 36px; }
-.discover h1 .green { color: rgb(83, 255, 98); }
+.discover h1 {
+    font-size: 36px;
+}
 
-/* --- Games Grid --- */
+.discover h1 .green {
+    color: rgb(83, 255, 98);
+}
+
+/* -------------------- Games Grid -------------------- */
 .games-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -124,7 +174,7 @@ body.dark-mode .sidebar ul li button { color: #121212; }
     padding: 0 20px 60px;
 }
 
-/* --- Individual Game Cards --- */
+/* -------------------- Individual Game Cards -------------------- */
 .game {
     background: rgba(53, 53, 54, 0.7);
     backdrop-filter: blur(15px);
@@ -133,9 +183,14 @@ body.dark-mode .sidebar ul li button { color: #121212; }
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-body.dark-mode .game { background: rgba(240, 240, 240, 0.7); }
+body.dark-mode .game {
+    background: rgba(240, 240, 240, 0.7);
+}
 
-.game:hover { transform: translateY(-3px); border: 2px solid rgb(83, 255, 98); }
+.game:hover {
+    transform: translateY(-3px);
+    border: 2px solid rgb(83, 255, 98);
+}
 
 .game img {
     width: 100%;
@@ -144,15 +199,85 @@ body.dark-mode .game { background: rgba(240, 240, 240, 0.7); }
     border-radius: 10px;
 }
 
-.game h2 { margin-top: 12px; font-size: 20px; }
-.game .creator { font-size: 14px; color: #d8d8d8; margin: 4px 0 8px; }
-body.dark-mode .game .creator { color: #555; }
-.game p { font-size: 14px; line-height: 1.4; color: #cfcfcf; }
-body.dark-mode .game p { color: #333; }
+.game h2 {
+    margin-top: 12px;
+    font-size: 20px;
+}
+
+.game .creator {
+    font-size: 14px;
+    color: #d8d8d8;
+    margin: 4px 0 8px;
+}
+
+body.dark-mode .game .creator {
+    color: #555;
+}
+
+.game p {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #cfcfcf;
+}
+
+body.dark-mode .game p {
+    color: #333;
+}
 
 .game .btn {
     width: 100%;
     height: 40px;
+    margin-top: 10px;
+    background-color: rgb(83, 255, 98);
+    border: none;
+    border-radius: 15px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.game .btn:hover {
+    background-color: rgb(64, 204, 75);
+    transform: translateY(-2px);
+}
+
+/* -------------------- Logout Modal -------------------- */
+.container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm {
+    width: 420px;
+    background: rgba(123,122,128,0.3);
+    backdrop-filter: blur(25px);
+    border-radius: 10px;
+    padding: 30px 40px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.dark-mode .confirm {
+    background:  rgb(223, 223, 223);
+    color: #121212;
+}
+
+.confirm .btn {
+    width: 120px;
+    height: 40px;
+    margin: 10px 5px 0 5px;
     margin-top: 10px;
     background-color: rgb(83, 255, 98);
     border: none;
@@ -163,23 +288,35 @@ body.dark-mode .game p { color: #333; }
     transition: background 0.2s, transform 0.2s;
 }
 
-.game .btn:hover { background-color: rgb(64, 204, 75); transform: translateY(-2px); }
-
-/* --- Logout Confirmation --- */
-.container, .confirm { display: none; }
-.confirm {
-    width: 420px;
-    background: rgba(123, 122, 128, 0.3);
-    backdrop-filter: blur(25px);
-    border-radius: 10px;
-    padding: 30px 40px;
-    color: white;
+.FadeIn {
+    animation: fadeIn 0.3s forwards;
 }
-body.dark-mode .confirm { background: rgba(200,200,200,0.3); color: #121212; }
 
-/* --- Responsive --- */
+.FadeOut {
+    animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9); }
+}
+
+/* -------------------- Responsive -------------------- */
 @media screen and (max-width: 768px) {
-    .discover h1 { font-size: 28px; }
-    .games-container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; padding: 0 15px 40px; }
-    .game img { height: 140px; }
+    .discover h1 {
+        font-size: 28px;
+    }
+    .games-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+        gap: 15px;
+        padding: 0 15px 40px;
+    }
+    .game img {
+        height: 140px;
+    }
 }

@@ -68,7 +68,13 @@ async function saveUserToFirebase(username, email, password, otp) {
     }
 
     // Save new user
-    await set(userRef, { username, email, password, OTP: otp });
+    await set(userRef, {
+      username,
+      email,
+      password,
+      OTP: otp,
+      bobux: 0 // starting amount
+    }); 
     console.log("User saved to Firebase:", key);
     return true;
 

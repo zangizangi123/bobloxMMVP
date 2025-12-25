@@ -388,3 +388,11 @@ button.disable {
   width: auto;
   height: auto;
 }
+
+.check {
+  padding-left: 15px;
+  display: inline-flex;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+}
