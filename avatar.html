@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Discover Games - Boblox</title>
-    <link rel="stylesheet" href="games.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="avatar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script type="module" src="games.js" defer></script>
+    <script type="module" src="avatar.js" defer></script>
     <link rel="icon" type="image/x-icon" href="images/favicons/Favicon.png">
+    <title>Avatar - Boblox</title>
 </head>
 <body>
     <div id="content">
-        <!-- Topbar -->
         <header class="topbar">
             <div class="topbar-left">
                 <button id="openSidebar" class="menu">
@@ -18,22 +18,34 @@
                 </button>
                 <a class="Boblox" href="homepage.html">Boblox</a>
             </div>
-            
             <div class="topbar-right">
                 <p id="bobux" class="bobux">Bobux: 0</p>
             </div>
         </header>
 
-        <!-- Page Heading -->
-        <section class="discover">
-            <h1>Discover <span class="green">Games</span></h1>
-        </section>
+        <section class="avatar-container">
+            <div class="avatar-box">
+                <h1 id="hello">Edit <span class="green">Avatar</span></h1>
+                
+                <div class="avatar-preview">
+                    <img id="avatarPreview" src="images/avatars/1.png" alt="Avatar Preview">
+                </div>
 
-        <!-- Games Grid -->
-        <div class="games-container" id="games"></div>
+                <div class="input-group">
+                    <label for="avatarSelect">Choose your look:</label>
+                    <select id="avatarSelect">
+                        <option value="1">Avatar 1</option>
+                        <option value="2">Avatar 2</option>
+                        <option value="3">Avatar 3</option>
+                        <option value="4">Avatar 4</option>
+                    </select>
+                </div>
+
+                <button id="confirmAvatar" class="btn">Save Changes</button>
+            </div>
+        </section>
     </div>
 
-    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <button class="close-btn" id="closeSidebar">&times;</button>
         <h2>Menu</h2>
@@ -42,13 +54,11 @@
             <li><a href="games.html">Games</a></li>
             <li><a href="upload.html">Create</a></li>
             <li><button id="darkModeToggle" class="darki">Dark Mode</button></li>
-            <li><a href="https://www.dropbox.com/scl/fi/vj9wouas6r1tqsg0ib0v5/Boblox-Installer.exe?rlkey=mmjadtl07fzab9s1eehw6s29i&st=ikwn1r27&dl=1">Download Launcher</a></li>
             <li><a href="avatar.html">Change Avatar</a></li>
             <li><a href="#" class="logout" id="logout">Logout</a></li>
         </ul>
     </div>
 
-    <!-- Logout Confirmation -->
     <div class="container">
         <div class="confirm" id="confirm">
             <h2>Are you sure you want to logout?</h2>
