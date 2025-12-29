@@ -17,104 +17,85 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function emailToKey(email) {
-  return email.replace(/\./g, "_");
-}
+// --- UTILITIES ---
+
+function emailToKey(email) { return email.replace(/\./g, "_"); }
 
 function normalizeLeet(text) {
-  return text
-    .toLowerCase()
-    .replace(/1/g, "i")
-    .replace(/!/g, "i")
-    .replace(/3/g, "e")
-    .replace(/4/g, "a")
-    .replace(/@/g, "a")
-    .replace(/5/g, "s")
-    .replace(/7/g, "t")
-    .replace(/0/g, "o")
-    .replace(/\$/g, "s")
-    .replace(/9/g, "g")
-    .replace(/v/g, "u");
+  return text.toLowerCase()
+    .replace(/1/g, "i").replace(/!/g, "i").replace(/3/g, "e")
+    .replace(/4/g, "a").replace(/@/g, "a").replace(/5/g, "s")
+    .replace(/7/g, "t").replace(/0/g, "o").replace(/\$/g, "s")
+    .replace(/9/g, "g").replace(/v/g, "u");
 }
 
 function generateNumericUID(length = 12) {
   let uid = '';
-  for (let i = 0; i < length; i++) {
-    uid += Math.floor(Math.random() * 10);
-  }
+  for (let i = 0; i < length; i++) { uid += Math.floor(Math.random() * 10); }
   return uid;
 }
 
 async function getUniqueNumericUID() {
   let uid = generateNumericUID();
   const snapshot = await get(ref(db, 'uids/' + uid));
-  if (snapshot.exists()) {
-    return await getUniqueNumericUID();
-  }
+  if (snapshot.exists()) return await getUniqueNumericUID();
   return uid;
 }
 
 async function saveUserToFirebase(username, email, password, otp) {
   const key = emailToKey(email);
   const userRef = ref(db, 'users/' + key);
-
   try {
     const snapshot = await get(userRef);
-    if (snapshot.exists()) {
-      alert("An account with this email already exists.");
-      return false;
-    }
-
+    if (snapshot.exists()) { alert("An account with this email already exists."); return false; }
     const allUsersRef = ref(db, 'users');
     const allUsersSnap = await get(allUsersRef);
     if (allUsersSnap.exists()) {
       const users = allUsersSnap.val();
       for (let uKey in users) {
         if (users[uKey].username.toLowerCase() === username.toLowerCase()) {
-          alert("This username is already taken.");
-          return false;
+          alert("This username is already taken."); return false;
         }
       }
     }
-
     const uid = await getUniqueNumericUID();
     await set(ref(db, 'uids/' + uid), true);
-
-    await set(userRef, {
-      username,
-      email,
-      password,
-      OTP: otp,
-      bobux: 0,
-      uid: uid,
-      avatar_id: 1
-    }); 
-    console.log("User saved to Firebase:", key);
+    await set(userRef, { username, email, password, OTP: otp, bobux: 0, uid: uid, avatar_id: 1 });
     return true;
-
-  } catch (err) {
-    console.error("Firebase save error:", err);
-    return false;
-  }
+  } catch (err) { return false; }
 }
+
+// --- REDIRECT LOGIC WITH YOUR EDITED DIV ---
 
 function redirectToUnity(email, uid) {
   const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
   
-  // Redirect to Unity
-  window.location.href = deepLink;
-  
-  // Fallback message
-  setTimeout(() => {
-    document.body.innerHTML = `
-      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif; color: white">
-        <h2>✅ Registration Successful!</h2>
-        <p>Returning to game...</p>
-        <p>If the game didn't open, <a href="${deepLink}" style="color: #4A90E2;">click here</a></p>
+  // Apply a body reset to prevent scrollbars or stretching
+  document.body.style.margin = "0";
+  document.body.style.overflow = "hidden";
+
+  document.body.innerHTML = `
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: sans-serif;">
+      <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
+        <h2 style="color: white; margin: 0 0 10px 0;">Success! ✅</h2>
+        <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
+        
+        <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
+           Launcher
+        </button>
+        
+        <button id="goHome" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
+           Website
+        </button>
       </div>
-    `;
-  }, 1000);
+    </div>
+  `;
+
+  document.getElementById("goLauncher").onclick = () => { window.location.href = deepLink; };
+  document.getElementById("goHome").onclick = () => { window.location.href = "homepage.html"; };
 }
+
+// --- DOM LISTENERS ---
 
 window.addEventListener("DOMContentLoaded", () => {
   const policy = document.getElementById("policy");
@@ -125,179 +106,73 @@ window.addEventListener("DOMContentLoaded", () => {
   const registerBtn = document.getElementById("registerBtn");
   const policyLink = document.getElementById("policyLink");
   const closePolicyBtn = document.getElementById("closePolicyBtn");
+  const step2 = document.querySelector(".step2");
+  const emailadress = document.getElementById("emailAdress");
+  const verifyemail = document.getElementById("VerifyEmail");
+  const inputs = document.querySelectorAll(".otp-group input");
+  const verifybutton = document.getElementById("verifyBtn");
+  const changeEmailBtn = document.getElementById("changeEmailBtn");
 
-  const step2 = document.querySelector(".step2"),
-        step3 = document.querySelector(".step3"),
-        emailadress = document.getElementById("emailAdress"),
-        verifyemail = document.getElementById("VerifyEmail"),
-        inputs = document.querySelectorAll(".otp-group input"),
-        verifybutton = document.getElementById("verifyBtn"),
-        changeEmailBtn = document.getElementById("changeEmailBtn");
+  let OTP = ""; let currentUID = "";
 
-  let OTP = "";
-  let currentUID = "";
+  if (localStorage.getItem("isLoggedIn") == "true") { window.location.href = "homepage.html"; }
 
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-  if (isLoggedIn == "true") {
-    window.location.href = "homepage.html";
-  }
+  if (lockBtn) lockBtn.addEventListener("click", () => {
+    passwInput.type = passwInput.type === "password" ? "text" : "password";
+    lockImg.src = passwInput.type === "text" ? "images/buttons/openlock.svg" : "images/buttons/bxs-lock-alt.svg";
+  });
 
-  let val = localStorage.getItem("savedInput");
-  if (val) {
-    document.getElementById("usernameInput").value = val;
-  }
-
-  function Unlock() {
-    if (passwInput.type === "password") {
-      passwInput.type = "text";
-      lockImg.src = "images/buttons/openlock.svg";
-    } else {
-      passwInput.type = "password";
-      lockImg.src = "images/buttons/bxs-lock-alt.svg";
-    }
-  }
-
-  function Policy() {
-    policy.style.display = "block";
-    wrapper.style.display = "none";
-    policy.classList.add("FadeIn");
-  }
-
-  function ClosePolicy() {
-    policy.style.display = "none";
-    wrapper.style.display = "block";
-    wrapper.classList.add("FadeIn");
-  }
-
-  function showEmailVerification() {
-    if (wrapper) wrapper.style.display = "none";
-    if (step2) step2.style.display = "block";
-    if (step3) step3.style.display = "none";
-  }
-
-  function changeMyEmail() {
-    if (wrapper) wrapper.style.display = "block";
-    if (step2) step2.style.display = "none";
-    if (step3) step3.style.display = "none";
-  }
-
-  const ValidateEmail = (email) => {
-    let re = /\S+@\S+\.\S+/;
-    if (registerBtn) {
-      if (re.test(email)) registerBtn.classList.remove("disable");
-      else registerBtn.classList.add("disable");
-    }
-  };
-
-  const generateOTP = () => Math.floor(1000 + Math.random() * 9000);
-
-  function validateForm() {
-    const username = document.getElementById("usernameInput").value.trim();
-    const email = emailadress.value.trim();
-    const password = passwInput.value.trim();
-    if (username.length < 3) {
-      alert("Username must be at least 3 characters long.");
-      return false;
-    } else if (leoProfanity.check(normalizeLeet(username))) {
-      alert("Username contains inappropriate language.");
-      return false;
-    }
-    if (password.length < 8) {
-      alert("Password must be at least 8 characters long.");
-      return false;
-    }
-    let re = /\S+@\S+\.\S+/;
-    if (!re.test(email)) {
-      alert("Please enter a valid email.");
-      return false;
-    }
-    const currentUserEmail = email;
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("currentUserEmail", currentUserEmail);
-    return true; 
-  }
-
-  if (lockBtn) lockBtn.addEventListener("click", Unlock);
-  if (policyLink) policyLink.addEventListener("click", (e) => { e.preventDefault(); Policy(); });
-  if (closePolicyBtn) closePolicyBtn.addEventListener("click", ClosePolicy);
-  if (changeEmailBtn) changeEmailBtn.addEventListener("click", (e) => { e.preventDefault(); changeMyEmail(); });
-  if (emailadress) emailadress.addEventListener("input", (e) => ValidateEmail(e.target.value));
+  if (policyLink) policyLink.onclick = (e) => { e.preventDefault(); policy.style.display = "block"; wrapper.style.display = "none"; };
+  if (closePolicyBtn) closePolicyBtn.onclick = () => { policy.style.display = "none"; wrapper.style.display = "block"; };
+  if (changeEmailBtn) changeEmailBtn.onclick = () => { wrapper.style.display = "block"; step2.style.display = "none"; };
 
   if (registerBtn) {
     registerBtn.addEventListener("click", async () => {
-      if (!validateForm()) return;
       const username = document.getElementById("usernameInput").value.trim();
       const email = emailadress.value.trim();
       const password = passwInput.value.trim();
-      OTP = generateOTP();
+
+      if (username.length < 3 || leoProfanity.check(normalizeLeet(username))) { alert("Invalid Username"); return; }
+      if (password.length < 8) { alert("Password too short"); return; }
+      
+      OTP = Math.floor(1000 + Math.random() * 9000);
       const success = await saveUserToFirebase(username, email, password, OTP);
       if (!success) return;
-      
-      // Get the UID that was just created
-      const userKey = emailToKey(email);
-      const userRef = ref(db, 'users/' + userKey);
-      const snapshot = await get(userRef);
-      if (snapshot.exists()) {
-        currentUID = snapshot.val().uid;
-      }
-      
+
+      const snap = await get(ref(db, 'users/' + emailToKey(email)));
+      currentUID = snap.val().uid;
       localStorage.setItem("currentUserEmail", email);
-      registerBtn.innerHTML = "&#9889; Sending...";
-      const templateParameter = {
-        from_name: "PolyTopia",
-        username: username,
-        OTP: OTP,
-        message: "OTP for your account",
-        reply_to: email,
-      };
+
       if (typeof emailjs !== "undefined") {
-        emailjs.send("service_v75vfw9", "template_evofvnp", templateParameter).then(
-          (res) => {
-            console.log(res);
-            registerBtn.innerHTML = "Register";
-            showEmailVerification();
-            if (verifyemail) verifyemail.textContent = email;
-          },
-          (err) => {
-            console.error(err);
-            registerBtn.innerHTML = "Register";
-          }
-        );
+        emailjs.send("service_v75vfw9", "template_evofvnp", { from_name: "PolyTopia", username, OTP, reply_to: email })
+        .then(() => {
+          wrapper.style.display = "none";
+          step2.style.display = "block";
+          if (verifyemail) verifyemail.textContent = email;
+        });
       }
     });
   }
 
-  if (inputs && verifybutton) {
-    inputs.forEach((input, index) => {
-      input.addEventListener("input", (e) => {
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-        if (e.target.value.length === 1 && index < inputs.length - 1) inputs[index + 1].focus();
-        if ([...inputs].every(inp => inp.value !== "")) verifybutton.classList.remove("disable");
-        else verifybutton.classList.add("disable");
-      });
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Backspace" && input.value === "" && index > 0) inputs[index - 1].focus();
-      });
+  inputs.forEach((input, index) => {
+    input.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+      if (e.target.value.length === 1 && index < inputs.length - 1) inputs[index + 1].focus();
+      verifybutton.classList.toggle("disable", ![...inputs].every(inp => inp.value !== ""));
     });
-  }
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && input.value === "" && index > 0) inputs[index - 1].focus();
+    });
+  });
 
   if (verifybutton) {
     verifybutton.addEventListener("click", () => {
-      let values = "";
-      inputs.forEach((input) => values += input.value);
-      if (OTP == values) {
-        const email = localStorage.getItem("currentUserEmail");
-        // Redirect to Unity after successful verification
-        redirectToUnity(email, currentUID);
-      } else {
-        verifybutton.classList.add("error-shake");
-        setTimeout(() => verifybutton.classList.remove("error-shake"), 1000);
-      }
+      let val = ""; inputs.forEach(i => val += i.value);
+      if (OTP == val) {
+        localStorage.setItem("isLoggedIn", "true");
+        redirectToUnity(localStorage.getItem("currentUserEmail"), currentUID);
+      } else { alert("Wrong OTP"); }
     });
   }
-
-  if (wrapper) wrapper.classList.add("FadeIn");
-
   if (typeof emailjs !== "undefined") emailjs.init("2CIHURV52vHS09X70");
-
 });

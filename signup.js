@@ -14,93 +14,54 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-function emailToKey(email) {
-    return email.replace(/\./g, "_");
-}
+function emailToKey(email) { return email.replace(/\./g, "_"); }
 
 function redirectToUnity(email, uid) {
     const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
     
-    // Redirect to Unity
-    window.location.href = deepLink;
-    
-    // Fallback message
-    setTimeout(() => {
-        document.body.innerHTML = `
-            <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif; color: white">
-                <h2>✅ Login Successful!</h2>
-                <p>Returning to game...</p>
-                <p>If the game didn't open, <a href="${deepLink}" style="color: #4A90E2;">click here</a></p>
-            </div>
-        `;
-    }, 1000);
+    document.body.style.margin = "0";
+    document.body.style.overflow = "hidden";
+
+    document.body.innerHTML = `
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: sans-serif;">
+      <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
+        <h2 style="color: white; margin: 0 0 10px 0;">Welcome Back! 🔓</h2>
+        <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
+        
+        <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
+           Launcher
+        </button>
+        
+        <button id="goHome" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
+           Website
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("goLauncher").onclick = () => { window.location.href = deepLink; };
+  document.getElementById("goHome").onclick = () => { window.location.href = "homepage.html"; };
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    const wrapper = document.getElementById("wrapper");
-    const lockButton = document.querySelector(".lock");
-    const lockImg = document.getElementById("lock");
-    const passwordInput = document.getElementById("passwinput");
-    const emailInput = document.getElementById("Emailinput");
     const loginButton = document.getElementById("LoginButton");
+    const emailInput = document.getElementById("Emailinput");
+    const passwordInput = document.getElementById("passwinput");
 
-    if (wrapper) wrapper.classList.add("FadeIn");
-
-    if (lockButton && lockImg && passwordInput) {
-        lockButton.addEventListener("click", (e) => {
-            e.preventDefault();
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                lockImg.src = "images/buttons/openlock.svg";
-            } else {
-                passwordInput.type = "password";
-                lockImg.src = "images/buttons/bxs-lock-alt.svg";
-            }
-        });
-    }
-
-    if (loginButton && emailInput && passwordInput) {
+    if (loginButton) {
         loginButton.addEventListener("click", async () => {
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
 
-            if (!email || !password) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            const userKey = emailToKey(email);
-            const userRef = ref(db, "users/" + userKey);
-
-            try {
-                const snapshot = await get(userRef);
-                if (snapshot.exists()) {
-                    const userData = snapshot.val();
-
-                    if (userData.password === password) {
-                        localStorage.setItem("currentUserEmail", email);
-                        localStorage.setItem("isLoggedIn", "true");
-                        console.log("localstorage saved succesfully");
-                        
-                        // Redirect to Unity with user data
-                        redirectToUnity(email, userData.uid);
-                    } else {
-                        alert("Incorrect password.");
-                    }
-                } else {
-                    alert("User not found.");
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-                alert("Error logging in.");
+            const snapshot = await get(ref(db, "users/" + emailToKey(email)));
+            if (snapshot.exists() && snapshot.val().password === password) {
+                localStorage.setItem("currentUserEmail", email);
+                localStorage.setItem("isLoggedIn", "true");
+                redirectToUnity(email, snapshot.val().uid);
+            } else {
+                alert("Invalid Credentials");
             }
         });
     }
-
-    // Redirect if already logged in
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (isLoggedIn === "true") {
-        window.location.href = "homepage.html";
-    }
-
+    if (localStorage.getItem("isLoggedIn") === "true") { window.location.href = "homepage.html"; }
 });
