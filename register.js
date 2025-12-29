@@ -68,7 +68,7 @@ async function saveUserToFirebase(username, email, password, otp) {
 // --- REDIRECT LOGIC WITH YOUR EDITED DIV ---
 
 function redirectToUnity(email, uid) {
-  const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+   const deepLink = `yourgame://login?userId=${encodeURIComponent(user.uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(user.email)}`;
   
   // Apply a body reset to prevent scrollbars or stretching
   document.body.style.margin = "0";

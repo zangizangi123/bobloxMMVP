@@ -17,7 +17,7 @@ const db = getDatabase(app);
 function emailToKey(email) { return email.replace(/\./g, "_"); }
 
 function redirectToUnity(email, uid) {
-    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+     const deepLink = `yourgame://login?userId=${encodeURIComponent(user.uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(user.email)}`;
     
     document.body.style.margin = "0";
     document.body.style.overflow = "hidden";
