@@ -18,6 +18,24 @@ function emailToKey(email) {
     return email.replace(/\./g, "_");
 }
 
+function redirectToUnity(email, uid) {
+    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+    
+    // Redirect to Unity
+    window.location.href = deepLink;
+    
+    // Fallback message
+    setTimeout(() => {
+        document.body.innerHTML = `
+            <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+                <h2>✅ Login Successful!</h2>
+                <p>Returning to game...</p>
+                <p>If the game didn't open, <a href="${deepLink}" style="color: #4A90E2;">click here</a></p>
+            </div>
+        `;
+    }, 1000);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     const wrapper = document.getElementById("wrapper");
     const lockButton = document.querySelector(".lock");
@@ -62,11 +80,10 @@ window.addEventListener("DOMContentLoaded", () => {
                     if (userData.password === password) {
                         localStorage.setItem("currentUserEmail", email);
                         localStorage.setItem("isLoggedIn", "true");
-                        const currentUserEmail = email
-                        localStorage.setItem("isLoggedIn", "true");
-                        localStorage.setItem("currentUserEmail", currentUserEmail);
                         console.log("localstorage saved succesfully");
-                        window.location.href = "homepage.html";
+                        
+                        // Redirect to Unity with user data
+                        redirectToUnity(email, userData.uid);
                     } else {
                         alert("Incorrect password.");
                     }

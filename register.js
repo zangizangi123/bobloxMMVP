@@ -98,6 +98,24 @@ async function saveUserToFirebase(username, email, password, otp) {
   }
 }
 
+function redirectToUnity(email, uid) {
+  const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+  
+  // Redirect to Unity
+  window.location.href = deepLink;
+  
+  // Fallback message
+  setTimeout(() => {
+    document.body.innerHTML = `
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h2>✅ Registration Successful!</h2>
+        <p>Returning to game...</p>
+        <p>If the game didn't open, <a href="${deepLink}" style="color: #4A90E2;">click here</a></p>
+      </div>
+    `;
+  }, 1000);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   const policy = document.getElementById("policy");
   const wrapper = document.getElementById("wrapper");
@@ -117,6 +135,7 @@ window.addEventListener("DOMContentLoaded", () => {
         changeEmailBtn = document.getElementById("changeEmailBtn");
 
   let OTP = "";
+  let currentUID = "";
 
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   if (isLoggedIn == "true") {
@@ -213,6 +232,15 @@ window.addEventListener("DOMContentLoaded", () => {
       OTP = generateOTP();
       const success = await saveUserToFirebase(username, email, password, OTP);
       if (!success) return;
+      
+      // Get the UID that was just created
+      const userKey = emailToKey(email);
+      const userRef = ref(db, 'users/' + userKey);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        currentUID = snapshot.val().uid;
+      }
+      
       localStorage.setItem("currentUserEmail", email);
       registerBtn.innerHTML = "&#9889; Sending...";
       const templateParameter = {
@@ -258,8 +286,9 @@ window.addEventListener("DOMContentLoaded", () => {
       let values = "";
       inputs.forEach((input) => values += input.value);
       if (OTP == values) {
-        if (step2) step2.style.display = "none";
-        if (step3) step3.style.display = "block";
+        const email = localStorage.getItem("currentUserEmail");
+        // Redirect to Unity after successful verification
+        redirectToUnity(email, currentUID);
       } else {
         verifybutton.classList.add("error-shake");
         setTimeout(() => verifybutton.classList.remove("error-shake"), 1000);
