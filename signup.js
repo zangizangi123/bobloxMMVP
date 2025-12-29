@@ -27,7 +27,7 @@ function redirectToUnity(email, uid) {
     // Fallback message
     setTimeout(() => {
         document.body.innerHTML = `
-            <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+            <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif; color: white">
                 <h2>✅ Login Successful!</h2>
                 <p>Returning to game...</p>
                 <p>If the game didn't open, <a href="${deepLink}" style="color: #4A90E2;">click here</a></p>
@@ -102,4 +102,5 @@ window.addEventListener("DOMContentLoaded", () => {
     if (isLoggedIn === "true") {
         window.location.href = "homepage.html";
     }
+
 });
