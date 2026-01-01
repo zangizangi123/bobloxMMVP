@@ -1,0 +1,143 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('images/blue.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-family: arial;
+}
+
+
+
+.Wrapper {
+  width: 520px;
+  background: rgba(53, 53, 54, 0.7);
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(39, 39, 39, 0.4);
+  color: white;
+  border-radius: 10px;
+  padding: 30px 40px;
+}
+
+.Wrapper h1 {
+  font-size: 36px;
+  text-align: center;
+  color: white;
+}
+
+.Wrapper .input-box {
+  position: relative;
+  width: 95%;
+  height: 50px;
+  margin: 30px 0;
+}
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: rgba(66, 66, 66, 0.6);
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  color: white;
+  padding-left: 15px;
+}
+
+
+
+.input-box input::placeholder {
+  color: white;
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.input-box .lock {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.btn {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 45px;
+  background-color: rgb(83, 255, 98);
+  border: none;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+  color: white;
+}
+
+.btn:hover {
+  background-color: rgb(64, 204, 75);
+  cursor: pointer;
+}
+
+.Wrapper .register{
+  color: white;
+  font-family: arial;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 16px;
+  margin: 20px 0 15px;
+}
+
+.Wrapper a{
+  color: white;
+  text-decoration: none;
+  font-weight: 600px;
+}
+
+.Wrapper a:hover{
+  text-decoration: underline;
+}
+
+.lock {
+  background: transparent;
+  border: none;
+  filter: invert(92%) sepia(0%) saturate(7466%) hue-rotate(42deg) brightness(115%) contrast(108%);
+}
+
+.passwordlock {
+  width: 17px;
+}
+
+.passwordlock:hover {
+  cursor: pointer;
+}
+
+a {
+  font-weight: 550;
+}
+
+@keyframes fadeInShow {
+  0%{
+    opacity: 0;
+    transform: scale(0);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.FadeIn {
+  animation: fadeInShow 0.3s;
+}
