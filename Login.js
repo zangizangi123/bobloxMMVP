@@ -21,71 +21,74 @@ function emailToKey(email) {
 }
 
 function redirectToUnity(email, uid) {
-    firebase.auth().currentUser.getIdToken().then((token) => {
-        const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
+    // Since you're using Realtime Database, not Firebase Auth
+    // You need to either:
+    // 1. Generate a simple token
+    // 2. Retrieve a stored token from the database
+    
+    // Option 1: Generate a simple session token
+    const token = generateSessionToken(uid);
+    
+    // Option 2: Or retrieve from database
+    // firebase.database().ref('users/' + uid + '/token').once('value').then((snapshot) => {
+    //     const token = snapshot.val();
+    //     ... rest of code
+    // });
+    
+    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
+    
+    console.log("Deep link created:", deepLink);
+    console.log("User ID:", uid);
+    console.log("Token:", token);
+    
+    document.body.style.margin = "0";
+    document.body.style.overflow = "hidden";
+    document.body.innerHTML = `
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
+      <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
+        <h2 style="color: white; margin: 0 0 10px 0;">Welcome Back! 🔓</h2>
+        <p style="color: white; margin-bottom: 10px; font-size: 14px;">Where to go next?</p>
+        <p style="color: #aaa; margin-bottom: 20px; font-size: 11px;">User: ${email}</p>
         
-        console.log("Deep link created:", deepLink); // Debug log
+        <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
+           Launcher
+        </button>
+        <button id="goHome" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
+           Website
+        </button>
         
-        document.body.style.margin = "0";
-        document.body.style.overflow = "hidden";
-        document.body.innerHTML = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
-          <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
-            <h2 style="color: white; margin: 0 0 10px 0;">Welcome Back! 🔓</h2>
-            <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
-            
-            <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
-               Launcher
-            </button>
-            
-            <button id="goHome" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
-               Website
-            </button>
-            
-            <p id="status" style="color: white; margin-top: 20px; font-size: 12px;"></p>
-          </div>
-        </div>
-      `;
-        document.getElementById("goLauncher").onclick = () => { 
-            console.log("Launcher button clicked, redirecting to:", deepLink);
-            document.getElementById("status").innerText = "Opening game...";
-            window.location.href = deepLink;
-            
-            // Show fallback message after 2 seconds
-            setTimeout(() => {
-                document.getElementById("status").innerHTML = 
-                    'Game not opening? <a href="' + deepLink + '" style="color: #53FF62;">Click here</a>';
-            }, 2000);
-        };
+        <p id="status" style="color: white; margin-top: 20px; font-size: 12px;"></p>
+      </div>
+    </div>
+  `;
+    
+    document.getElementById("goLauncher").onclick = () => { 
+        console.log("Launcher button clicked!");
+        console.log("Redirecting to:", deepLink);
+        document.getElementById("status").innerText = "Opening game...";
         
-        document.getElementById("goHome").onclick = () => { 
-            window.location.href = "homepage.html"; 
-        };
-    }).catch((error) => {
-        console.error("Error getting token:", error);
-        alert("Failed to get authentication token. Please try again.");
-    });
+        // Attempt to open the game
+        window.location.href = deepLink;
+        
+        // Show fallback after 2 seconds
+        setTimeout(() => {
+            document.getElementById("status").innerHTML = 
+                'Game not opening? Make sure it\'s installed.<br><a href="' + deepLink + '" style="color: #53FF62;">Try again</a>';
+        }, 2000);
+    };
+    
+    document.getElementById("goHome").onclick = () => { 
+        window.location.href = "homepage.html"; 
+    };
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-    const loginButton = document.getElementById("LoginButton");
-    const lockBtn = document.querySelector(".lock");
-    const lockImg = document.getElementById("lock");
-    const emailInput = document.getElementById("Emailinput");
-    const passwordInput = document.getElementById("passwinput");
-
-    // Check if already logged in
-    if (localStorage.getItem("isLoggedIn") === "true") { 
-        window.location.href = "homepage.html"; 
-    }
-
-    // Password visibility toggle
-    if (lockBtn && lockImg && passwordInput) {
-        lockBtn.addEventListener("click", () => {
-            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
-            lockImg.src = passwordInput.type === "text" ? "images/buttons/openlock.svg" : "images/buttons/bxs-lock-alt.svg";
-        });
-    }
+// Simple token generator (for session validation)
+function generateSessionToken(uid) {
+    // Generate a random session token
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 15);
+    return btoa(`${uid}_${timestamp}_${random}`); // Base64 encode
+}
 
     // Login handler
     if (loginButton && emailInput && passwordInput) {
@@ -146,5 +149,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+
 
 
