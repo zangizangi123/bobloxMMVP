@@ -20,58 +20,51 @@ function emailToKey(email) {
     return email.replace(/\./g, "_"); 
 }
 
-function redirectToUnity(email, uid, token = null) {
-    // Build deep link with or without token
-    let deepLink;
-    if (token) {
-        deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
-    } else {
-        yourgame:'//login?userId=${encodeURIComponent(user.uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(user.email)}';
-    }
-    
-    document.body.style.margin = "0";
-    document.body.style.overflow = "hidden";
-
-    document.body.innerHTML = `
-    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
-      <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
-        <h2 style="color: white; margin: 0 0 10px 0;">Welcome Back! 🔓</h2>
-        <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
+function redirectToUnity(email, uid) {
+    firebase.auth().currentUser.getIdToken().then((token) => {
+        const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
         
-        <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
-           Launcher
-        </button>
+        console.log("Deep link created:", deepLink); // Debug log
         
-        <button id="goHome" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
-           Website
-        </button>
+        document.body.style.margin = "0";
+        document.body.style.overflow = "hidden";
+        document.body.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
+          <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
+            <h2 style="color: white; margin: 0 0 10px 0;">Welcome Back! 🔓</h2>
+            <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
+            
+            <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
+               Launcher
+            </button>
+            
+            <button id="goHome" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
+               Website
+            </button>
+            
+            <p id="status" style="color: white; margin-top: 20px; font-size: 12px;"></p>
+          </div>
+        </div>
+      `;
+        document.getElementById("goLauncher").onclick = () => { 
+            console.log("Launcher button clicked, redirecting to:", deepLink);
+            document.getElementById("status").innerText = "Opening game...";
+            window.location.href = deepLink;
+            
+            // Show fallback message after 2 seconds
+            setTimeout(() => {
+                document.getElementById("status").innerHTML = 
+                    'Game not opening? <a href="' + deepLink + '" style="color: #53FF62;">Click here</a>';
+            }, 2000);
+        };
         
-        <p id="launcherStatus" style="color: #aaa; margin-top: 20px; font-size: 12px;"></p>
-      </div>
-    </div>
-  `;
-
-    const goLauncherBtn = document.getElementById("goLauncher");
-    const goHomeBtn = document.getElementById("goHome");
-    const statusText = document.getElementById("launcherStatus");
-
-    goLauncherBtn.onclick = () => {
-        statusText.textContent = "Opening launcher...";
-        
-        // Try to open the app with the deep link
-        window.location.href = deepLink;
-        
-        // Fallback message if app doesn't open
-        setTimeout(() => {
-            if (document.hasFocus()) {
-                statusText.innerHTML = `Launcher not detected. <a href="${deepLink}" style="color: rgb(83, 255, 98);">Click here to retry</a>`;
-            }
-        }, 2000);
-    };
-    
-    goHomeBtn.onclick = () => { 
-        window.location.href = "homepage.html"; 
-    };
+        document.getElementById("goHome").onclick = () => { 
+            window.location.href = "homepage.html"; 
+        };
+    }).catch((error) => {
+        console.error("Error getting token:", error);
+        alert("Failed to get authentication token. Please try again.");
+    });
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -153,4 +146,5 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+
 
