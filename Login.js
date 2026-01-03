@@ -28,16 +28,12 @@ function generateSessionToken(email, uid) {
 }
 
 function redirectToUnity(email, uid) {
-    // Generate a session token
-    const token = generateSessionToken(email, uid);
+    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
     
-    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
-    
-    console.log("Deep link created:", deepLink);
+    console.log("Redirecting to Unity with deep link:", deepLink);
     
     document.body.style.margin = "0";
     document.body.style.overflow = "hidden";
-
     document.body.innerHTML = `
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
       <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
@@ -52,22 +48,19 @@ function redirectToUnity(email, uid) {
            Website
         </button>
         
-        <p id="status" style="color: #aaa; margin-top: 20px; font-size: 12px;"></p>
+        <p id="status" style="color: #aaa; margin-top: 15px; font-size: 12px;"></p>
       </div>
     </div>
   `;
-
+    
     document.getElementById("goLauncher").onclick = () => { 
         console.log("Launcher button clicked, redirecting to:", deepLink);
-        document.getElementById("status").innerText = "Opening game...";
+        document.getElementById("status").innerText = "Launching game...";
         window.location.href = deepLink;
         
-        // Show fallback message after 2 seconds
         setTimeout(() => {
-            const statusEl = document.getElementById("status");
-            if (statusEl) {
-                statusEl.innerHTML = 'Game not opening? <a href="' + deepLink + '" style="color: #53FF62;">Click here</a>';
-            }
+            document.getElementById("status").innerHTML = 
+                'Game not opening? <a href="' + deepLink + '" style="color: #53FF62;">Click here</a>';
         }, 2000);
     };
     
@@ -144,3 +137,4 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
