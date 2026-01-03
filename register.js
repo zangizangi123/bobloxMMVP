@@ -49,15 +49,16 @@ async function getUniqueNumericUID() {
 }
 
 function redirectToUnity(email, uid) {
-  const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
-  
-  document.body.style.margin = "0";
-  document.body.style.overflow = "hidden";
-
-  document.body.innerHTML = `
+    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+    
+    console.log("Redirecting to Unity with deep link:", deepLink);
+    
+    document.body.style.margin = "0";
+    document.body.style.overflow = "hidden";
+    document.body.innerHTML = `
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
       <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
-        <h2 style="color: white; margin: 0 0 10px 0;">Success! ✅</h2>
+        <h2 style="color: white; margin: 0 0 10px 0;">Welcome Back! 🔓</h2>
         <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
         
         <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
@@ -67,16 +68,26 @@ function redirectToUnity(email, uid) {
         <button id="goHome" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
            Website
         </button>
+        
+        <p id="status" style="color: #aaa; margin-top: 15px; font-size: 12px;"></p>
       </div>
     </div>
   `;
-
-  document.getElementById("goLauncher").onclick = () => { 
-    window.location.href = deepLink; 
-  };
-  document.getElementById("goHome").onclick = () => { 
-    window.location.href = "homepage.html"; 
-  };
+    
+    document.getElementById("goLauncher").onclick = () => { 
+        console.log("Launcher button clicked, redirecting to:", deepLink);
+        document.getElementById("status").innerText = "Launching game...";
+        window.location.href = deepLink;
+        
+        setTimeout(() => {
+            document.getElementById("status").innerHTML = 
+                'Game not opening? <a href="' + deepLink + '" style="color: #53FF62;">Click here</a>';
+        }, 2000);
+    };
+    
+    document.getElementById("goHome").onclick = () => { 
+        window.location.href = "homepage.html"; 
+    };
 }
 
 // --- DOM LISTENERS ---
@@ -331,4 +342,5 @@ window.addEventListener("DOMContentLoaded", () => {
   if (typeof emailjs !== "undefined") {
     emailjs.init("2CIHURV52vHS09X70");
   }
+
 });
