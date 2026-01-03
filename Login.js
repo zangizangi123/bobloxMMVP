@@ -26,7 +26,7 @@ function redirectToUnity(email, uid, token = null) {
     if (token) {
         deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
     } else {
-        deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+        yourgame://login?userId=${encodeURIComponent(user.uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(user.email)};
     }
     
     document.body.style.margin = "0";
@@ -151,4 +151,5 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
 });
