@@ -49,7 +49,7 @@ async function getUniqueNumericUID() {
 }
 
 function redirectToUnity(email, uid) {
-    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}&displayName=${encodeURIComponent(displayName)}`;
     
     console.log("Redirecting to Unity with deep link:", deepLink);
     
@@ -344,4 +344,5 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
 
