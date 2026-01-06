@@ -1,8 +1,6 @@
-// import Firebase v12 modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-// Your Firebase config
 const firebaseConfig = {
 	apiKey: "AIzaSyAaxU10m2NHhGbciOMiUfhSrHeks8QujXg",
 	authDomain: "bobloxauth2.firebaseapp.com",
@@ -13,16 +11,15 @@ const firebaseConfig = {
 	appId: "1:302659528234:web:ce6b02d848a991fc0c0553"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Cloudinary config
 const CLOUD_NAME = "dzmk4sss2";
 const UPLOAD_PRESET_IMAGE = "boblox";
 const UPLOAD_PRESET_GAME = "boblox";
 
 const form = document.getElementById("uploadForm");
+const submitButton = form.querySelector('input[type="submit"], button[type="submit"]');
 
 form.addEventListener("submit", async (e) => {
 	e.preventDefault();
@@ -37,7 +34,16 @@ form.addEventListener("submit", async (e) => {
 		return;
 	}
 
-	// Get creator username from localStorage + Firebase
+	submitButton.disabled = true;
+	submitButton.style.opacity = "0.6";
+	submitButton.style.cursor = "not-allowed";
+	const originalButtonText = submitButton.value || submitButton.textContent;
+	if (submitButton.value !== undefined) {
+		submitButton.value = "Uploading...";
+	} else {
+		submitButton.textContent = "Uploading...";
+	}
+
 	let username = "Unknown";
 	const currentEmail = localStorage.getItem("currentUserEmail");
 	if (currentEmail) {
@@ -50,7 +56,12 @@ form.addEventListener("submit", async (e) => {
 	const gameId = Date.now();
 
 	try {
-		// Upload icon to Cloudinary
+		if (submitButton.value !== undefined) {
+			submitButton.value = "Uploading icon...";
+		} else {
+			submitButton.textContent = "Uploading icon...";
+		}
+
 		const iconData = new FormData();
 		iconData.append("file", iconFile);
 		iconData.append("upload_preset", UPLOAD_PRESET_IMAGE);
@@ -60,7 +71,12 @@ form.addEventListener("submit", async (e) => {
 		});
 		const iconJson = await iconRes.json();
 
-		// Upload game to Cloudinary (raw)
+		if (submitButton.value !== undefined) {
+			submitButton.value = "Uploading game file...";
+		} else {
+			submitButton.textContent = "Uploading game file...";
+		}
+
 		const gameData = new FormData();
 		gameData.append("file", gameFile);
 		gameData.append("upload_preset", UPLOAD_PRESET_GAME);
@@ -70,11 +86,15 @@ form.addEventListener("submit", async (e) => {
 		});
 		const gameJson = await gameRes.json();
 
-		// Convert HTTPS to HTTP
+		if (submitButton.value !== undefined) {
+			submitButton.value = "Saving to database...";
+		} else {
+			submitButton.textContent = "Saving to database...";
+		}
+
 		const iconUrlHttp = iconJson.secure_url.replace("https://", "http://");
 		const gameUrlHttp = gameJson.secure_url.replace("https://", "http://");
 
-		// Save game info to Firebase
 		await set(ref(db, `games/${gameId}`), {
 			id: gameId,
 			name,
@@ -89,5 +109,14 @@ form.addEventListener("submit", async (e) => {
 	} catch (err) {
 		console.error(err);
 		alert("Upload failed. Check console.");
+	} finally {
+		submitButton.disabled = false;
+		submitButton.style.opacity = "1";
+		submitButton.style.cursor = "pointer";
+		if (submitButton.value !== undefined) {
+			submitButton.value = originalButtonText;
+		} else {
+			submitButton.textContent = originalButtonText;
+		}
 	}
 });

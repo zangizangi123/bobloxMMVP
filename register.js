@@ -17,8 +17,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// --- UTILITIES ---
-
 function emailToKey(email) { 
   return email.replace(/\./g, "_"); 
 }
@@ -49,16 +47,15 @@ async function getUniqueNumericUID() {
 }
 
 function redirectToUnity(email, uid) {
-    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}&displayName=${encodeURIComponent(displayName)}`;
-    
-    console.log("Redirecting to Unity with deep link:", deepLink);
-    
-    document.body.style.margin = "0";
-    document.body.style.overflow = "hidden";
-    document.body.innerHTML = `
+  const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+  
+  document.body.style.margin = "0";
+  document.body.style.overflow = "hidden";
+
+  document.body.innerHTML = `
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
       <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
-        <h2 style="color: white; margin: 0 0 10px 0;">Welcome! 🔓</h2>
+        <h2 style="color: white; margin: 0 0 10px 0;">Success! âœ…</h2>
         <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
         
         <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
@@ -68,29 +65,17 @@ function redirectToUnity(email, uid) {
         <button id="goHome" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
            Website
         </button>
-        
-        <p id="status" style="color: #aaa; margin-top: 15px; font-size: 12px;"></p>
       </div>
     </div>
   `;
-    
-    document.getElementById("goLauncher").onclick = () => { 
-        console.log("Launcher button clicked, redirecting to:", deepLink);
-        document.getElementById("status").innerText = "Launching game...";
-        window.location.href = deepLink;
-        
-        setTimeout(() => {
-            document.getElementById("status").innerHTML = 
-                'Game not opening? <a href="' + deepLink + '" style="color: #53FF62;">Click here</a>';
-        }, 2000);
-    };
-    
-    document.getElementById("goHome").onclick = () => { 
-        window.location.href = "homepage.html"; 
-    };
-}
 
-// --- DOM LISTENERS ---
+  document.getElementById("goLauncher").onclick = () => { 
+    window.location.href = deepLink; 
+  };
+  document.getElementById("goHome").onclick = () => { 
+    window.location.href = "homepage.html"; 
+  };
+}
 
 window.addEventListener("DOMContentLoaded", () => {
   const policy = document.getElementById("policy");
@@ -113,12 +98,10 @@ window.addEventListener("DOMContentLoaded", () => {
   let currentUID = "";
   let pendingUserData = null;
 
-  // Check if already logged in
   if (localStorage.getItem("isLoggedIn") === "true") { 
     window.location.href = "homepage.html"; 
   }
 
-  // Password visibility toggle
   if (lockBtn && lockImg && passwInput) {
     lockBtn.addEventListener("click", () => {
       passwInput.type = passwInput.type === "password" ? "text" : "password";
@@ -126,7 +109,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Policy modal handlers
   if (policyLink && policy && wrapper) {
     policyLink.onclick = (e) => { 
       e.preventDefault(); 
@@ -146,26 +128,23 @@ window.addEventListener("DOMContentLoaded", () => {
     changeEmailBtn.onclick = () => { 
       wrapper.style.display = "block"; 
       step2.style.display = "none";
-      // Clear OTP inputs
+  
       inputs.forEach(input => input.value = "");
       verifybutton.classList.add("disable");
     };
   }
 
-  // Registration handler
   if (registerBtn) {
     registerBtn.addEventListener("click", async () => {
       const username = document.getElementById("usernameInput").value.trim();
       const email = emailadress.value.trim();
       const password = passwInput.value.trim();
 
-      // Check if policy is accepted
       if (!policyCheck.checked) {
         alert("Please accept the Privacy Policy to continue");
         return;
       }
 
-      // Validation
       if (!username || !email || !password) {
         alert("Please fill in all fields");
         return;
@@ -186,14 +165,12 @@ window.addEventListener("DOMContentLoaded", () => {
         return; 
       }
 
-      // Email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         alert("Please enter a valid email address");
         return;
       }
       
-      // Check if email or username already exists
       const key = emailToKey(email);
       const userRef = ref(db, 'users/' + key);
       
@@ -216,17 +193,14 @@ window.addEventListener("DOMContentLoaded", () => {
           }
         }
         
-        // Generate OTP and UID but DON'T save yet
         OTP = Math.floor(1000 + Math.random() * 9000);
         currentUID = await getUniqueNumericUID();
         
-        // Store pending data for after OTP verification
         pendingUserData = { username, email, password, OTP, uid: currentUID };
         
         localStorage.setItem("currentUserEmail", email);
         localStorage.setItem("currentUserUid", currentUID);
 
-        // Send OTP email
         if (typeof emailjs !== "undefined") {
           emailjs.send("service_v75vfw9", "template_evofvnp", { 
             from_name: "PolyTopia", 
@@ -256,7 +230,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // OTP input handlers
   inputs.forEach((input, index) => {
     input.addEventListener("input", (e) => {
       e.target.value = e.target.value.replace(/[^0-9]/g, "");
@@ -272,7 +245,6 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Allow paste functionality
     input.addEventListener("paste", (e) => {
       e.preventDefault();
       const pastedData = e.clipboardData.getData("text").replace(/[^0-9]/g, "");
@@ -284,7 +256,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       });
       
-      // Focus last filled input or last input
       const lastFilledIndex = Math.min(digits.length - 1, inputs.length - 1);
       inputs[lastFilledIndex].focus();
       
@@ -292,21 +263,17 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // OTP verification handler
   if (verifybutton) {
     verifybutton.addEventListener("click", async () => {
       let val = "";
       inputs.forEach(i => val += i.value);
       
-      // Validate OTP length
       if (val.length !== 4) {
         alert("Please enter all 4 digits");
         return;
       }
       
-      // Convert both to strings for comparison
       if (String(OTP) === String(val)) {
-        // NOW save to Firebase after OTP is verified
         if (pendingUserData) {
           try {
             await set(ref(db, 'uids/' + pendingUserData.uid), true);
@@ -330,7 +297,6 @@ window.addEventListener("DOMContentLoaded", () => {
       } else { 
         console.log("OTP mismatch - Expected:", OTP, "Got:", val);
         alert("Incorrect OTP. Please try again."); 
-        // Clear inputs and refocus
         inputs.forEach(input => input.value = "");
         inputs[0].focus();
         verifybutton.classList.add("disable");
@@ -338,11 +304,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  // Initialize EmailJS
   if (typeof emailjs !== "undefined") {
     emailjs.init("2CIHURV52vHS09X70");
   }
-
 });
-
-

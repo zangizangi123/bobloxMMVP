@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="uploadshirt.css">
+    <link rel="icon" type="image/x-icon" href="images/favicons/Favicon.png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Upload Shirt</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="title">
+            <h1>Upload your T-Shirt</h1>
+        </div>
+        <form id="uploadShirtForm">
+            <label for="shirtImage">Choose a T-Shirt image to upload:</label><br><br>
+            <div class="Inputbox">
+                <input type="file" id="shirtImage" name="shirtImage" accept="image/*" required><br><br>
+            </div>
+            <label for="shirtName">Choose a name for your T-Shirt:</label><br><br>
+            <div class="Inputbox">
+                <input type="text" class="name" id="shirtName" name="shirtName" placeholder="Name" maxlength="21" required><br><br>
+                <i class='bx bxs-t-shirt'></i> 
+            </div>
+            <label for="shirtPrice">Set a price (Bobux):</label><br><br>
+            <div class="Inputbox">
+                <input type="number" class="name" id="shirtPrice" name="shirtPrice" placeholder="Price (0 for free)" min="0" value="0" required><br><br>
+                <i class='bx bx-dollar'></i> 
+            </div>
+            <input type="submit" class="submit" value="Upload TShirt">
+        </form>
+    </div>
+    <script type="module" src="uploadshirt.js"></script>
+</body>
+</html>

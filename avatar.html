@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="avatar.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script type="module" src="avatar.js" defer></script>
     <link rel="icon" type="image/x-icon" href="images/favicons/Favicon.png">
     <title>Avatar - Boblox</title>
 </head>
@@ -25,20 +24,32 @@
 
         <section class="avatar-container">
             <div class="avatar-box">
-                <h1 id="hello">Edit <span class="green">Avatar</span></h1>
+                <h1>Edit <span class="green">Avatar</span></h1>
                 
                 <div class="avatar-preview">
-                    <img id="avatarPreview" src="images/avatars/1.png" alt="Avatar Preview">
+                    <div class="preview-wrapper">
+                        <img id="avatarPreview" src="images/avatars/1.png" alt="Base Avatar">
+                        <img id="shirtOverlay" src="" alt="Equipped Shirt">
+                    </div>
                 </div>
 
                 <div class="input-group">
-                    <label for="avatarSelect">Choose your look:</label>
+                    <label for="avatarSelect">Change Base Character:</label>
                     <select id="avatarSelect">
+                        <option value="0">Avatar 0</option>
                         <option value="1">Avatar 1</option>
                         <option value="2">Avatar 2</option>
                         <option value="3">Avatar 3</option>
                         <option value="4">Avatar 4</option>
                     </select>
+                </div>
+
+                <div class="inventory-section">
+                    <label>Equip Your Shirts:</label>
+                    <div id="ownedShirts" class="shirts-grid-mini">
+                        <p class="status-msg">Loading inventory...</p>
+                    </div>
+                    <button id="clearShirt" class="btn-outline">Unequip Shirt</button>
                 </div>
 
                 <button id="confirmAvatar" class="btn">Save Changes</button>
@@ -53,18 +64,61 @@
             <li><a href="homepage.html">Home</a></li>
             <li><a href="games.html">Games</a></li>
             <li><a href="upload.html">Create</a></li>
+            <li><a href="catalog.html">Catalog</a></li>
+            <li><a href="uploadshirt.html">Upload Shirt</a></li>
             <li><button id="darkModeToggle" class="darki">Dark Mode</button></li>
+            <li><a href="https://www.dropbox.com/scl/fi/h3sccfdj484ocan680bfa/Boblox-Setup.exe?rlkey=lya3neuy00kfk03nq0ircm3sg&st=bcw3ql2l&dl=1">Download Launcher</a></li>
             <li><a href="avatar.html">Change Avatar</a></li>
             <li><a href="#" class="logout" id="logout">Logout</a></li>
         </ul>
     </div>
 
-    <div class="container">
-        <div class="confirm" id="confirm">
-            <h2>Are you sure you want to logout?</h2>
-            <button class="btn yes">Yes</button>
-            <button class="btn no">No</button>
-        </div>
-    </div>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const openBtn = document.getElementById('openSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+
+        openBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !openBtn.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        document.getElementById('logout').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentUserEmail');
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('savedInput');
+                window.location.href = 'index.html';
+            }
+        });
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.textContent = 'Light Mode';
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem(
+                'darkMode',
+                document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled'
+            );
+            darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+        });
+    </script>
+
+    <script type="module" src="avatar.js"></script>
 </body>
 </html>

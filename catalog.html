@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home - Boblox</title>
-    <link rel="stylesheet" href="homepage.css">
+    <title>Catalog - Boblox</title>
+    <link rel="stylesheet" href="catalog.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script type="module" src="homepage.js"></script>
+    <script type="module" src="catalog.js"></script>
     <link rel="icon" type="image/x-icon" href="images/favicons/Favicon.png">
 </head>
 <body>
@@ -24,8 +24,13 @@
         </header>
 
         <section class="greeting">
-            <h1 id="hello">Hello, </h1>
-            <p>Nothing else to see</p>
+            <h1>Catalog</h1>
+            <p>Browse and purchase shirts</p>
+        </section>
+
+        <section class="shirts-container">
+            <div id="shirtsGrid" class="shirts-grid">
+            </div>
         </section>
     </div>
 
@@ -49,11 +54,23 @@
         </ul>
     </div>
 
-    <div class="container">
+    <div class="container logout-container">
         <div class="confirm" id="confirm">
             <h2>Are you sure you want to logout?</h2>
             <button class="btn yes">Yes</button>
             <button class="btn no">No</button>
+        </div>
+    </div>
+
+    <div class="container purchase-container">
+        <div class="confirm purchase-confirm" id="purchaseConfirm">
+            <h2>Purchase Shirt?</h2>
+            <img id="purchaseShirtImage" src="" alt="Shirt">
+            <p id="purchaseShirtName"></p>
+            <p id="purchaseShirtPrice"></p>
+            <p id="purchaseShirtCreator"></p>
+            <button class="btn purchase-yes">Purchase</button>
+            <button class="btn purchase-no">Cancel</button>
         </div>
     </div>
 </body>

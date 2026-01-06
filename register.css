@@ -21,7 +21,6 @@ h1 {
   font-family: Arial, sans-serif;
 }
 
-/* Main wrapper */
 .wrapper {
   width: 100%;
   max-width: 520px;
@@ -206,7 +205,6 @@ input[type="checkbox"]:checked::before {
   transform: scale(1);
 }
 
-/* OTP Container */
 .container {
   background: rgba(53, 53, 54, 0.7);
   backdrop-filter: blur(25px);
@@ -314,7 +312,6 @@ button.disable {
   user-select: none;
 }
 
-/* Policy Modal */
 .policyBox {
   width: 90%;
   max-width: 520px;
@@ -386,7 +383,6 @@ button.disable {
   height: auto;
 }
 
-/* Character Image */
 .img2 {
   position: fixed;
   bottom: 0;
@@ -401,7 +397,6 @@ button.disable {
   margin-left: 30px;
 }
 
-/* Animations */
 @keyframes fadeInShow {
   0% {
     opacity: 0;
@@ -436,7 +431,6 @@ button.disable {
   }
 }
 
-/* Hide steps by default */
 .step1, .step2, .step3 {
   display: none;
 }
@@ -445,7 +439,6 @@ button.disable {
   display: block;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .img2 img {
     height: 35vh;

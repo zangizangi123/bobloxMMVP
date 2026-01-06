@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('images/blue.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.wrapper {
+    width: 520px;
+    background: rgba(53, 53, 54, 0.7);
+    backdrop-filter: blur(25px);
+    border: 2px solid rgba(255, 255, 255, 0.1); 
+    color: white;
+    border-radius: 20px; 
+    padding: 30px 40px;
+}
+
+.title h1 {
+    font-size: 28px;
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 16px;
+    color: white;
+    font-weight: 600;
+}
+
+.Inputbox {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+body input[type="text"],
+body input[type="number"] {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    background: rgba(66, 66, 66, 0.6);
+    border-radius: 15px;
+    font-size: 16px;
+    color: white;
+    padding-left: 15px;
+    padding-right: 45px;
+}
+
+.Inputbox i {
+    position: absolute;
+    right: 15px;
+    top: 38%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: white;
+}
+
+.submit {
+    margin-top: 10px;
+    width: 100%;
+    height: 45px;
+    background-color: rgb(83, 255, 98);
+    border: none;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    color: white;
+    cursor: pointer;
+}
+
+.submit:hover {
+    background-color: #3ec749;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    background: rgba(66, 66, 66, 0.6);
+    border-radius: 15px;
+    color: white;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: #53ff62;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

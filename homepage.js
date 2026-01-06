@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-// --- Firebase config ---
 const firebaseConfig = {
     apiKey: "AIzaSyAaxU10m2NHhGbciOMiUfhSrHeks8QujXg",
     authDomain: "bobloxauth2.firebaseapp.com",
@@ -15,7 +14,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Convert email to Firebase key
 function emailToKey(email) {
     return email.replace(/\./g, "_");
 }
@@ -33,18 +31,15 @@ window.addEventListener("DOMContentLoaded", () => {
     const noBtn = confirm?.querySelector(".no");
     const hello = document.getElementById("hello");
 
-    // --- Check if logged in ---
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn !== "true") {
         window.location.href = "index.html";
         return;
     }
 
-    // --- Sidebar toggle ---
     openSidebarBtn?.addEventListener("click", () => sidebar.classList.add("active"));
     closeSidebarBtn?.addEventListener("click", () => sidebar.classList.remove("active"));
 
-    // --- Dark mode toggle ---
     if (localStorage.getItem("darkMode") === "enabled") {
         document.body.classList.add("dark-mode");
         if (darkModeToggle) darkModeToggle.textContent = "Light Mode";
@@ -59,7 +54,6 @@ window.addEventListener("DOMContentLoaded", () => {
         darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
     });
 
-    // --- Logout confirmation ---
     if (logoutBtn && confirm && container && content) {
         logoutBtn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -68,7 +62,7 @@ window.addEventListener("DOMContentLoaded", () => {
             confirm.style.pointerEvents = "auto";
             content.style.filter = "blur(10px)";
             confirm.classList.remove("FadeOut");
-            void confirm.offsetWidth; // trigger reflow
+            void confirm.offsetWidth;
             confirm.classList.add("FadeIn");
         });
 
@@ -93,7 +87,6 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Fetch username from Firebase ---
     const currentEmail = localStorage.getItem("currentUserEmail");
     if (currentEmail && hello) {
         const emailKey = emailToKey(currentEmail);
@@ -103,7 +96,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
                     const username = userData.username;
-                    const bobux = userData.bobux || 0; // default to 0 if not set
+                    const bobux = userData.bobux || 0;
 
                     hello.textContent = `Hello, ${username}`;
                     document.getElementById("bobux").textContent = `Bobux: ${bobux}`;

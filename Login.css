@@ -14,8 +14,6 @@ h1 {
   font-family: arial;
 }
 
-
-
 .Wrapper {
   width: 520px;
   background: rgba(53, 53, 54, 0.7);
@@ -51,8 +49,6 @@ h1 {
   color: white;
   padding-left: 15px;
 }
-
-
 
 .input-box input::placeholder {
   color: white;

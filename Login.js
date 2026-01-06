@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAaxU10m2NHhGbciOMiUfhSrHeks8QujXg",
@@ -13,31 +14,27 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const auth = getAuth(app);
 
 function emailToKey(email) { 
     return email.replace(/\./g, "_"); 
 }
 
-// Generate a simple token for the session
-function generateSessionToken(email, uid) {
-    const timestamp = Date.now();
-    const randomStr = Math.random().toString(36).substring(2, 15);
-    const data = `${email}:${uid}:${timestamp}:${randomStr}`;
-    // Create a base64 encoded token
-    return btoa(data);
-}
-
-function redirectToUnity(email, uid) {
-    const deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}&displayName=${encodeURIComponent(displayName)}`;
-    
-    console.log("Redirecting to Unity with deep link:", deepLink);
+function redirectToUnity(email, uid, token = null) {
+    let deepLink;
+    if (token) {
+        deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
+    } else {
+        deepLink = `yourgame://login?userId=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}`;
+    }
     
     document.body.style.margin = "0";
     document.body.style.overflow = "hidden";
+
     document.body.innerHTML = `
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
       <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
-        <h2 style="color: white; margin: 0 0 10px 0;">Welcome Back! 🔓</h2>
+        <h2 style="color: white; margin: 0 0 10px 0;">Welcome Back! ðŸ""</h2>
         <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
         
         <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
@@ -48,23 +45,28 @@ function redirectToUnity(email, uid) {
            Website
         </button>
         
-        <p id="status" style="color: #aaa; margin-top: 15px; font-size: 12px;"></p>
+        <p id="launcherStatus" style="color: #aaa; margin-top: 20px; font-size: 12px;"></p>
       </div>
     </div>
   `;
-    
-    document.getElementById("goLauncher").onclick = () => { 
-        console.log("Launcher button clicked, redirecting to:", deepLink);
-        document.getElementById("status").innerText = "Launching game...";
+
+    const goLauncherBtn = document.getElementById("goLauncher");
+    const goHomeBtn = document.getElementById("goHome");
+    const statusText = document.getElementById("launcherStatus");
+
+    goLauncherBtn.onclick = () => {
+        statusText.textContent = "Opening launcher...";
+        
         window.location.href = deepLink;
         
         setTimeout(() => {
-            document.getElementById("status").innerHTML = 
-                'Game not opening? <a href="' + deepLink + '" style="color: #53FF62;">Click here</a>';
+            if (document.hasFocus()) {
+                statusText.innerHTML = `Launcher not detected. <a href="${deepLink}" style="color: rgb(83, 255, 98);">Click here to retry</a>`;
+            }
         }, 2000);
     };
     
-    document.getElementById("goHome").onclick = () => { 
+    goHomeBtn.onclick = () => { 
         window.location.href = "homepage.html"; 
     };
 }
@@ -76,12 +78,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const emailInput = document.getElementById("Emailinput");
     const passwordInput = document.getElementById("passwinput");
 
-    // Check if already logged in
     if (localStorage.getItem("isLoggedIn") === "true") { 
         window.location.href = "homepage.html"; 
     }
 
-    // Password visibility toggle
     if (lockBtn && lockImg && passwordInput) {
         lockBtn.addEventListener("click", () => {
             passwordInput.type = passwordInput.type === "password" ? "text" : "password";
@@ -89,13 +89,11 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Login handler
     if (loginButton && emailInput && passwordInput) {
         loginButton.addEventListener("click", async () => {
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
 
-            // Basic validation
             if (!email || !password) {
                 alert("Please fill in all fields");
                 return;
@@ -107,16 +105,22 @@ window.addEventListener("DOMContentLoaded", () => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
                     
-                    // Check if password matches
                     if (userData.password === password) {
+                        const uid = userData.uid || emailToKey(email);
+                        
                         localStorage.setItem("currentUserEmail", email);
                         localStorage.setItem("isLoggedIn", "true");
-                        
-                        // Use the uid from database
-                        const uid = userData.uid || emailToKey(email);
                         localStorage.setItem("currentUserUid", uid);
                         
-                        redirectToUnity(email, uid);
+                        try {
+                            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                            const token = await userCredential.user.getIdToken();
+                            console.log("Got Firebase Auth token");
+                            redirectToUnity(email, uid, token);
+                        } catch (authError) {
+                            console.log("No Firebase Auth account, continuing without token");
+                            redirectToUnity(email, uid, null);
+                        }
                     } else {
                         alert("Invalid email or password");
                     }
@@ -129,7 +133,6 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Allow Enter key to submit
         passwordInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
                 loginButton.click();
@@ -137,5 +140,3 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
-

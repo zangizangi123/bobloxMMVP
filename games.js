@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyAaxU10m2NHhGbciOMiUfhSrHeks8QujXg",
     authDomain: "bobloxauth2.firebaseapp.com",
@@ -15,7 +14,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Convert email to Firebase key
 function emailToKey(email) {
     return email.replace(/\./g, "_");
 }
@@ -27,24 +25,21 @@ window.addEventListener("DOMContentLoaded", () => {
     const closeSidebarBtn = document.getElementById("closeSidebar");
     const darkModeToggle = document.getElementById("darkModeToggle");
     const logoutBtn = document.getElementById("logout");
-    const container = document.querySelector(".container"); // select by class
+    const container = document.querySelector(".container");
     const confirm = document.getElementById("confirm");
     const content = document.getElementById("content");
     const yesBtn = confirm.querySelector(".yes");
     const noBtn = confirm.querySelector(".no");
     const bobuxDisplay = document.getElementById("bobux");
 
-    // Redirect if not logged in
     if (localStorage.getItem("isLoggedIn") !== "true") {
         window.location.href = "index.html";
         return;
     }
 
-    // Sidebar toggle
     openSidebarBtn?.addEventListener("click", () => sidebar.classList.add("active"));
     closeSidebarBtn?.addEventListener("click", () => sidebar.classList.remove("active"));
 
-    // Dark mode
     if (localStorage.getItem("darkMode") === "enabled") {
         document.body.classList.add("dark-mode");
         if (darkModeToggle) darkModeToggle.textContent = "Light Mode";
@@ -59,7 +54,6 @@ window.addEventListener("DOMContentLoaded", () => {
         darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
     });
 
-    // Logout modal
     logoutBtn?.addEventListener("click", (e) => {
         e.preventDefault();
         container.style.display = "flex";
@@ -67,7 +61,7 @@ window.addEventListener("DOMContentLoaded", () => {
         confirm.style.pointerEvents = "auto";
         content.style.filter = "blur(10px)";
         confirm.classList.remove("FadeOut");
-        void confirm.offsetWidth; // trigger reflow
+        void confirm.offsetWidth;
         confirm.classList.add("FadeIn");
     });
 
@@ -91,7 +85,6 @@ window.addEventListener("DOMContentLoaded", () => {
         window.location.href = "index.html";
     });
 
-    // Fetch Bobux
     const currentEmail = localStorage.getItem("currentUserEmail");
     if (currentEmail && bobuxDisplay) {
         const emailKey = emailToKey(currentEmail);
@@ -106,7 +99,6 @@ window.addEventListener("DOMContentLoaded", () => {
             .catch(console.error);
     }
 
-    // Load games
     async function loadGames() {
         try {
             const snapshot = await get(ref(db, "games"));
@@ -127,7 +119,7 @@ window.addEventListener("DOMContentLoaded", () => {
                     <h2>${game.name}</h2>
                     <div class="creator">by ${game.creator}</div>
                     <p>${game.description}</p>
-                    <button class="btn play-btn">▶ Play</button>
+                    <button class="btn play-btn">â–¶ Play</button>
                 `;
 
                 div.querySelector(".play-btn")?.addEventListener("click", () => {

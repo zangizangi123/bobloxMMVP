@@ -15,7 +15,7 @@ h1 {
 
 .top {
 	display: flex;
-	align-items: center; /* text & wrapper centered vertically */
+	align-items: center;
 	justify-content: space-between;
 	height: 500px;
 	background: url('images/blue.jpg');
@@ -26,9 +26,9 @@ h1 {
 
 .image-container {
 	display: flex;
-	align-items: flex-end; /* push image down */
-	justify-content: flex-end; /* push image right */
-	flex: 0 0 auto; /* don't let it stretch */
+	align-items: flex-end;
+	justify-content: flex-end;
+	flex: 0 0 auto;
 	height: 100%;
 }
 
@@ -37,8 +37,6 @@ h1 {
 	width: auto;
 	object-fit: contain;
 }
-
-
 
 .text {
     display: flex;
@@ -108,7 +106,6 @@ h1 {
   text-align: center;
   color: white;
 }
-
 
 .wrapper .inputbox {
   position: relative;
@@ -195,8 +192,8 @@ a:hover {
 
 .part-1 .text {
     display: flex;
-    flex-direction: column; /* stack children vertically */
-    justify-content: flex-start;/* align children to the left of the container */
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .part-1 h3 {
@@ -274,4 +271,3 @@ p {
   height: 50px;
   color: white;
 }
-
