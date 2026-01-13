@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Discover Games - Boblox</title>
-    <link rel="stylesheet" href="games.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Boblox</title>
+    <link rel="stylesheet" href="profile.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script type="module" src="games.js" defer></script>
     <link rel="icon" type="image/x-icon" href="images/favicons/Favicon.png">
 </head>
 <body>
@@ -23,11 +23,38 @@
             </div>
         </header>
 
-        <section class="discover">
-            <h1>Discover <span class="green">Games</span></h1>
-        </section>
+        <section class="profile-container">
+            <div class="profile-box">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img id="userAvatar" src="images/avatars/1.png" alt="Avatar">
+                        <img id="userShirt" class="shirt-overlay" src="" alt="Shirt">
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="username">Loading...</h1>
+                        <p class="user-id">User ID: <span id="userId">-</span></p>
+                        <p class="user-bobux"><i class='bx bx-dollar'></i> <span id="userBobux">0</span> Bobux</p>
+                    </div>
+                </div>
 
-        <div class="games-container" id="games"></div>
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <i class='bx bxs-t-shirt'></i>
+                        <h3 id="shirtCount">0</h3>
+                        <p>Shirts Owned</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class='bx bxs-joystick'></i>
+                        <h3 id="gamesCount">0</h3>
+                        <p>Games Created</p>
+                    </div>
+                </div>
+
+                <button class="btn-back" onclick="window.history.back()">
+                    <i class='bx bx-arrow-back'></i> Back to Users
+                </button>
+            </div>
+        </section>
     </div>
 
     <div class="sidebar" id="sidebar">
@@ -39,10 +66,10 @@
             <li><a href="upload.html">Create</a></li>
             <li><a href="catalog.html">Catalog</a></li>
             <li><a href="uploadshirt.html">Upload Shirt</a></li>
+            <li><a href="users.html">Users</a></li>
             <li><button id="darkModeToggle" class="darki">Dark Mode</button></li>
             <li><a href="https://www.dropbox.com/scl/fi/h3sccfdj484ocan680bfa/Boblox-Setup.exe?rlkey=lya3neuy00kfk03nq0ircm3sg&st=bcw3ql2l&dl=1">Download Launcher</a></li>
             <li><a href="avatar.html">Change Avatar</a></li>
-            <li><a href="users.html">Users</a></li>
             <li><a href="#" class="logout" id="logout">Logout</a></li>
         </ul>
     </div>
@@ -54,5 +81,7 @@
             <button class="btn no">No</button>
         </div>
     </div>
+
+    <script type="module" src="profile.js"></script>
 </body>
 </html>

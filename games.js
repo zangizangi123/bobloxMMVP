@@ -119,7 +119,7 @@ window.addEventListener("DOMContentLoaded", () => {
                     <h2>${game.name}</h2>
                     <div class="creator">by ${game.creator}</div>
                     <p>${game.description}</p>
-                    <button class="btn play-btn">â–¶ Play</button>
+                    <button class="btn play-btn">▶︎ Play</button>
                 `;
 
                 div.querySelector(".play-btn")?.addEventListener("click", () => {

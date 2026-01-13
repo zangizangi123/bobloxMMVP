@@ -29,7 +29,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const content = document.getElementById("content");
     const yesBtn = confirm?.querySelector(".yes");
     const noBtn = confirm?.querySelector(".no");
-    const hello = document.getElementById("hello");
+    const bobuxDisplay = document.getElementById("bobux");
 
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn !== "true") {
@@ -88,28 +88,112 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     const currentEmail = localStorage.getItem("currentUserEmail");
-    if (currentEmail && hello) {
+    if (currentEmail && bobuxDisplay) {
         const emailKey = emailToKey(currentEmail);
         const userRef = ref(db, `users/${emailKey}`);
         get(userRef)
             .then(snapshot => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
-                    const username = userData.username;
-                    const bobux = userData.bobux || 0;
-
-                    if (userData.checkmark === "true") {
-                        hello.innerHTML = `Hello, ${username} <img src="images/login/checkmark.png" alt="icon" class="verified">`;
-                    } else {
-                        hello.textContent = `Hello, ${username}`;
-                    }
-
-                    const bobuxElement = document.getElementById("bobux");
-                    if (bobuxElement) {
-                        bobuxElement.textContent = `Bobux: ${bobux}`;
-                    }
+                    bobuxDisplay.textContent = `Bobux: ${userData.bobux || 0}`;
                 }
             })
             .catch(console.error);
     }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetUserId = urlParams.get('uid');
+
+    if (!targetUserId) {
+        alert("No user ID provided");
+        window.location.href = "users.html";
+        return;
+    }
+
+    async function loadUserProfile() {
+        try {
+            const usersRef = ref(db, 'users');
+            const snapshot = await get(usersRef);
+
+            if (!snapshot.exists()) {
+                console.error("No users in database");
+                alert("User not found");
+                window.location.href = "users.html";
+                return;
+            }
+
+            const users = snapshot.val();
+            let targetUser = null;
+            let targetUserKey = null;
+
+            for (const key in users) {
+                const user = users[key];
+                if (user.uid) {
+                    const userUidStr = String(user.uid).trim();
+                    const targetUidStr = String(targetUserId).trim();
+                    
+                    if (userUidStr === targetUidStr) {
+                        targetUser = user;
+                        targetUserKey = key;
+                        break;
+                    }
+                }
+            }
+
+            if (!targetUser) {
+                console.error("User not found with UID:", targetUserId);
+                alert("User not found");
+                window.location.href = "users.html";
+                return;
+            }
+
+            const usernameElement = document.getElementById("username");
+            if (targetUser.checkmark === "true") {
+                usernameElement.innerHTML = `${targetUser.username || "Unknown"} <img src="images/login/checkmark.png" alt="Verified" class="verified-badge">`;
+            } else {
+                usernameElement.textContent = targetUser.username || "Unknown";
+            }
+
+            document.getElementById("userId").textContent = targetUser.uid || "-";
+            document.getElementById("userBobux").textContent = targetUser.bobux || 0;
+
+            const avatarImg = document.getElementById("userAvatar");
+            const shirtImg = document.getElementById("userShirt");
+            
+            avatarImg.src = `images/avatars/${targetUser.avatar_id || 1}.png`;
+            
+            if (targetUser.equipped_shirt && targetUser.equipped_shirt !== "") {
+                shirtImg.src = targetUser.equipped_shirt;
+                shirtImg.style.display = "block";
+            } else {
+                shirtImg.style.display = "none";
+            }
+
+            const ownedShirts = targetUser.ownedShirts || {};
+            const shirtCount = Object.keys(ownedShirts).length;
+            document.getElementById("shirtCount").textContent = shirtCount;
+
+            const gamesRef = ref(db, 'games');
+            const gamesSnapshot = await get(gamesRef);
+            let gamesCount = 0;
+
+            if (gamesSnapshot.exists()) {
+                const games = gamesSnapshot.val();
+                for (const gameId in games) {
+                    if (games[gameId].creator === targetUser.username) {
+                        gamesCount++;
+                    }
+                }
+            }
+
+            document.getElementById("gamesCount").textContent = gamesCount;
+
+        } catch (error) {
+            console.error("Error loading profile:", error);
+            alert("Error loading profile: " + error.message);
+            window.location.href = "users.html";
+        }
+    }
+
+    loadUserProfile();
 });

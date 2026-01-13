@@ -49,7 +49,14 @@ body.dark-mode {
     margin: 0;
 }
 
-body.dark-mode .topbar { background-color: #e0e0e0; }
+body.dark-mode .topbar { 
+    background-color: #e0e0e0; 
+}
+
+body.dark-mode .Boblox,
+body.dark-mode .bobux {
+    color: #121212;
+}
 
 .topbar-left button.menu {
     display: flex;           
@@ -60,6 +67,10 @@ body.dark-mode .topbar { background-color: #e0e0e0; }
     border: none;
     cursor: pointer;
     filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(2%) hue-rotate(197deg) brightness(106%) contrast(101%);
+}
+
+body.dark-mode .topbar-left button.menu {
+    filter: brightness(0) saturate(100%) invert(0%);
 }
 
 .topbar-left img {
@@ -83,7 +94,10 @@ body.dark-mode .topbar { background-color: #e0e0e0; }
 
 .sidebar.active { left: 0; }
 
-body.dark-mode .sidebar { background-color: #e0e0e0; color: #121212; }
+body.dark-mode .sidebar { 
+    background-color: #e0e0e0; 
+    color: #121212; 
+}
 
 .sidebar .close-btn {
     background: none;
@@ -92,6 +106,10 @@ body.dark-mode .sidebar { background-color: #e0e0e0; color: #121212; }
     font-size: 30px;
     cursor: pointer;
     margin-bottom: 20px;
+}
+
+body.dark-mode .sidebar .close-btn {
+    color: #121212;
 }
 
 .sidebar ul { list-style: none; padding: 0; }
@@ -109,6 +127,12 @@ body.dark-mode .sidebar { background-color: #e0e0e0; color: #121212; }
     cursor: pointer;
 }
 
+body.dark-mode .sidebar ul li a,
+body.dark-mode .sidebar ul li button,
+body.dark-mode .sidebar .darki {
+    color: #121212;
+}
+
 .greeting {
     padding: 20px 20px 10px;
     text-align: left;
@@ -116,6 +140,10 @@ body.dark-mode .sidebar { background-color: #e0e0e0; color: #121212; }
 
 .greeting h1 { font-size: 36px; }
 .greeting p { margin-top: 10px; font-size: 16px; color: #cfcfcf; }
+
+body.dark-mode .greeting p {
+    color: #666;
+}
 
 .shirts-container {
     padding: 20px;
@@ -139,6 +167,10 @@ body.dark-mode .sidebar { background-color: #e0e0e0; color: #121212; }
     width: 100%;
 }
 
+body.dark-mode .shirt-card {
+    background-color: #e0e0e0;
+}
+
 .shirt-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(83, 255, 98, 0.3);
@@ -158,6 +190,10 @@ body.dark-mode .sidebar { background-color: #e0e0e0; color: #121212; }
     color: white;
 }
 
+body.dark-mode .shirt-card h3 {
+    color: #121212;
+}
+
 .shirt-card .price {
     color: rgb(83, 255, 98);
     font-weight: 600;
@@ -167,6 +203,10 @@ body.dark-mode .sidebar { background-color: #e0e0e0; color: #121212; }
 .shirt-card .creator {
     color: #cfcfcf;
     font-size: 14px;
+}
+
+body.dark-mode .shirt-card .creator {
+    color: #666;
 }
 
 .container {

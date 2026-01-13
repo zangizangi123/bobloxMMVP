@@ -22,11 +22,23 @@ function emailToKey(email) {
 }
 
 function normalizeLeet(text) {
-  return text.toLowerCase()
-    .replace(/1/g, "i").replace(/!/g, "i").replace(/3/g, "e")
-    .replace(/4/g, "a").replace(/@/g, "a").replace(/5/g, "s")
-    .replace(/7/g, "t").replace(/0/g, "o").replace(/\$/g, "s")
-    .replace(/9/g, "g").replace(/v/g, "u");
+  let normalized = text.toLowerCase()
+    .replace(/1/g, "i").replace(/!/g, "i").replace(/\|/g, "i")
+    .replace(/3/g, "e").replace(/4/g, "a").replace(/@/g, "a")
+    .replace(/5/g, "s").replace(/\$/g, "s").replace(/7/g, "t")
+    .replace(/\+/g, "t").replace(/0/g, "o").replace(/9/g, "g")
+    .replace(/8/g, "b").replace(/v/g, "u").replace(/w/g, "vv");
+  return normalized.replace(/[^a-z0-9]/g, "");
+}
+
+function isProfane(text) {
+  const cleanText = text.toLowerCase().trim();
+  const leetText = normalizeLeet(cleanText);
+  const collapsedText = leetText.replace(/(.)\1+/g, '$1');
+  
+  return leoProfanity.check(cleanText) || 
+         leoProfanity.check(leetText) || 
+         leoProfanity.check(collapsedText);
 }
 
 function generateNumericUID(length = 12) {
@@ -55,7 +67,7 @@ function redirectToUnity(email, uid) {
   document.body.innerHTML = `
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('images/blue.jpg') no-repeat center center; background-size: cover; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: arial;">
       <div style="background: rgba(53, 53, 54, 0.7); padding: 40px; border-radius: 10px; border: 2px solid rgba(39, 39, 39, 0.4); text-align: center; width: 320px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
-        <h2 style="color: white; margin: 0 0 10px 0;">Success! âœ…</h2>
+        <h2 style="color: white; margin: 0 0 10px 0;">Success! ✅</h2>
         <p style="color: white; margin-bottom: 30px; font-size: 14px;">Where to go next?</p>
         
         <button id="goLauncher" style="width: 120px; height: 40px; margin: 10px 5px; background-color: rgb(83, 255, 98); border: none; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; transition: 0.2s;">
@@ -155,7 +167,7 @@ window.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      if (leoProfanity.check(normalizeLeet(username))) {
+      if (isProfane(username)) {
         alert("Username contains inappropriate language");
         return;
       }
