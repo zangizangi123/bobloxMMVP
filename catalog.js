@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyAaxU10m2NHhGbciOMiUfhSrHeks8QujXg",
     authDomain: "bobloxauth2.firebaseapp.com",
@@ -15,7 +14,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Convert email to Firebase key
 function emailToKey(email) {
     return email.replace(/\./g, "_");
 }
@@ -38,19 +36,17 @@ window.addEventListener("DOMContentLoaded", () => {
     let currentUserBobux = 0;
     let currentUserEmail = "";
     let selectedShirt = null;
+    let selectedShirtKey = null;
 
-    // Check if logged in
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn !== "true") {
         window.location.href = "index.html";
         return;
     }
 
-    // Sidebar toggle
     openSidebarBtn?.addEventListener("click", () => sidebar.classList.add("active"));
     closeSidebarBtn?.addEventListener("click", () => sidebar.classList.remove("active"));
 
-    // Dark mode toggle
     if (localStorage.getItem("darkMode") === "enabled") {
         document.body.classList.add("dark-mode");
         if (darkModeToggle) darkModeToggle.textContent = "Light Mode";
@@ -65,7 +61,6 @@ window.addEventListener("DOMContentLoaded", () => {
         darkModeToggle.textContent = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
     });
 
-    // Logout confirmation
     if (logoutBtn && confirm && logoutContainer && content) {
         logoutBtn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -99,7 +94,6 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Fetch user data and bobux
     currentUserEmail = localStorage.getItem("currentUserEmail");
     if (currentUserEmail) {
         const emailKey = emailToKey(currentUserEmail);
@@ -112,10 +106,11 @@ window.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("bobux").textContent = `Bobux: ${currentUserBobux}`;
                 }
             })
-            .catch(console.error);
+            .catch(error => {
+                console.error("Error fetching user data:", error);
+            });
     }
 
-    // Load shirts from Firebase
     async function loadShirts() {
         shirtsGrid.innerHTML = '<div class="loading">Loading shirts...</div>';
         
@@ -125,16 +120,16 @@ window.addEventListener("DOMContentLoaded", () => {
             
             if (snapshot.exists()) {
                 const shirts = snapshot.val();
-                const shirtsArray = Object.values(shirts);
+                const shirtsEntries = Object.entries(shirts);
                 
-                if (shirtsArray.length === 0) {
+                if (shirtsEntries.length === 0) {
                     shirtsGrid.innerHTML = '<div class="no-shirts">No shirts available yet.</div>';
                     return;
                 }
                 
                 shirtsGrid.innerHTML = '';
                 
-                shirtsArray.forEach(shirt => {
+                shirtsEntries.forEach(([key, shirt]) => {
                     const shirtCard = document.createElement('div');
                     shirtCard.className = 'shirt-card';
                     const price = shirt.price || 0;
@@ -149,6 +144,7 @@ window.addEventListener("DOMContentLoaded", () => {
                     
                     shirtCard.addEventListener('click', () => {
                         selectedShirt = shirt;
+                        selectedShirtKey = key;
                         showPurchaseModal(shirt);
                     });
                     
@@ -163,7 +159,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Show purchase modal
     function showPurchaseModal(shirt) {
         const purchaseShirtImage = document.getElementById("purchaseShirtImage");
         const purchaseShirtName = document.getElementById("purchaseShirtName");
@@ -187,7 +182,6 @@ window.addEventListener("DOMContentLoaded", () => {
         purchaseConfirm.classList.add("FadeIn");
     }
 
-    // Close purchase modal
     function closePurchaseModal() {
         purchaseConfirm.classList.remove("FadeIn");
         void purchaseConfirm.offsetWidth;
@@ -201,13 +195,15 @@ window.addEventListener("DOMContentLoaded", () => {
         }, 300);
     }
 
-    // Purchase shirt
     async function purchaseShirt() {
-        if (!selectedShirt || !currentUserEmail) return;
+        if (!selectedShirt || !currentUserEmail || !selectedShirtKey) {
+            alert("Unable to process purchase. Please try again.");
+            closePurchaseModal();
+            return;
+        }
         
         const shirtPrice = selectedShirt.price || 0;
         
-        // Check if user has enough bobux (only if shirt costs something)
         if (shirtPrice > 0 && currentUserBobux < shirtPrice) {
             alert("Not enough Bobux!");
             closePurchaseModal();
@@ -219,53 +215,82 @@ window.addEventListener("DOMContentLoaded", () => {
             const userRef = ref(db, `users/${emailKey}`);
             const snapshot = await get(userRef);
             
-            if (snapshot.exists()) {
-                const userData = snapshot.val();
-                const ownedShirts = userData.ownedShirts || [];
-                
-                // Check if already owned
-                if (ownedShirts.includes(selectedShirt.id)) {
-                    alert("You already own this shirt!");
-                    closePurchaseModal();
-                    return;
-                }
-                
-                // Add shirt to owned and deduct bobux if necessary
-                ownedShirts.push(selectedShirt.id);
-                const updateData = {
-                    ownedShirts: ownedShirts,
-                    currentShirt: selectedShirt.id // Auto-equip purchased shirt
-                };
-                
-                // Only deduct bobux if the shirt costs something
-                if (shirtPrice > 0) {
-                    const newBobux = currentUserBobux - shirtPrice;
-                    updateData.bobux = newBobux;
-                    currentUserBobux = newBobux;
-                    document.getElementById("bobux").textContent = `Bobux: ${currentUserBobux}`;
-                }
-                
-                await update(userRef, updateData);
-                
-                const message = shirtPrice === 0 ? 
-                    "Free shirt claimed and equipped successfully!" : 
-                    "Shirt purchased and equipped successfully!";
-                alert(message);
+            if (!snapshot.exists()) {
+                alert("User data not found. Please try logging in again.");
                 closePurchaseModal();
+                return;
             }
+            
+            const userData = snapshot.val();
+            let ownedShirts = userData.ownedShirts;
+            
+            if (!ownedShirts || typeof ownedShirts !== 'object') {
+                ownedShirts = [];
+            } else if (!Array.isArray(ownedShirts)) {
+                ownedShirts = Object.values(ownedShirts);
+            }
+            
+            if (ownedShirts.includes(selectedShirtKey)) {
+                alert("You already own this shirt!");
+                closePurchaseModal();
+                return;
+            }
+            
+            ownedShirts.push(selectedShirtKey);
+            const updateData = {
+                ownedShirts: ownedShirts,
+                currentShirt: selectedShirtKey
+            };
+            
+            if (shirtPrice > 0) {
+                const newBobux = currentUserBobux - shirtPrice;
+                updateData.bobux = newBobux;
+                
+                if (selectedShirt.creatorEmail && selectedShirt.creatorEmail !== currentUserEmail) {
+                    try {
+                        const creatorEmailKey = emailToKey(selectedShirt.creatorEmail);
+                        const creatorRef = ref(db, `users/${creatorEmailKey}`);
+                        const creatorSnapshot = await get(creatorRef);
+                        
+                        if (creatorSnapshot.exists()) {
+                            const creatorData = creatorSnapshot.val();
+                            const creatorCurrentBobux = creatorData.bobux || 0;
+                            const creatorNewBobux = creatorCurrentBobux + shirtPrice;
+                            
+                            await update(creatorRef, {
+                                bobux: creatorNewBobux
+                            });
+                        }
+                    } catch (creatorError) {
+                        console.error("Error updating creator bobux:", creatorError);
+                    }
+                }
+            }
+            
+            await update(userRef, updateData);
+            
+            if (shirtPrice > 0) {
+                currentUserBobux = updateData.bobux;
+                document.getElementById("bobux").textContent = `Bobux: ${currentUserBobux}`;
+            }
+            
+            const message = shirtPrice === 0 ? 
+                "Free shirt claimed and equipped successfully!" : 
+                "Shirt purchased and equipped successfully!";
+            alert(message);
+            closePurchaseModal();
         } catch (error) {
             console.error("Error purchasing shirt:", error);
-            alert("Purchase failed. Please try again.");
+            alert("Purchase failed. Please check your connection and try again.");
+            closePurchaseModal();
         }
     }
 
-    // Purchase modal buttons
     const purchaseYesBtn = purchaseConfirm?.querySelector(".purchase-yes");
     const purchaseNoBtn = purchaseConfirm?.querySelector(".purchase-no");
     
     purchaseYesBtn?.addEventListener("click", purchaseShirt);
     purchaseNoBtn?.addEventListener("click", closePurchaseModal);
 
-    // Load shirts on page load
     loadShirts();
 });

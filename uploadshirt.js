@@ -39,9 +39,11 @@ form.addEventListener("submit", async (e) => {
 	submitButton.value = "Uploading...";
 
 	let username = "Unknown";
+	let creatorEmail = "";
 	const currentEmail = localStorage.getItem("currentUserEmail");
 	if (currentEmail) {
-		const emailKey = currentEmail.replace(".", "_");
+		creatorEmail = currentEmail;
+		const emailKey = currentEmail.replace(/\./g, "_");
 		const userRef = ref(db, `users/${emailKey}`);
 		const snapshot = await get(userRef);
 		if (snapshot.exists()) username = snapshot.val().username;
@@ -71,6 +73,7 @@ form.addEventListener("submit", async (e) => {
 			image: imageUrlHttp,
 			price: shirtPrice,
 			creator: username,
+			creatorEmail: creatorEmail,
 			uploadedAt: new Date().toISOString()
 		});
 
