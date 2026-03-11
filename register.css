@@ -407,7 +407,7 @@ button.disable {
     transform: scale(1);
   }
 }
-
+ 
 .FadeIn {
   animation: fadeInShow 0.3s ease-out;
 }
@@ -490,4 +490,8 @@ button.disable {
     height: 40px;
     font-size: 20px;
   }
+}
+
+.checkmark {
+  height: 200px;
 }

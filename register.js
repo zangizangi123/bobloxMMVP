@@ -223,6 +223,7 @@ window.addEventListener("DOMContentLoaded", () => {
           .then(() => {
             wrapper.style.display = "none";
             step2.style.display = "block";
+            document.querySelector(".step2").classList.remove("active");
             if (verifyemail) {
               verifyemail.textContent = email;
             }
@@ -300,7 +301,9 @@ window.addEventListener("DOMContentLoaded", () => {
             });
             
             localStorage.setItem("isLoggedIn", "true");
-            redirectToUnity(pendingUserData.email, pendingUserData.uid);
+            step2.style.display = "none";
+            document.querySelector(".step2").classList.remove("active");
+            document.querySelector(".step3").classList.add("active");
           } catch (err) {
             console.error("Failed to save user:", err);
             alert("Registration failed. Please try again.");
