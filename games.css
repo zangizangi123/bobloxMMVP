@@ -88,7 +88,7 @@ body.dark-mode .topbar-right .bobux {
 }
 
 body.dark-mode .sidebar {
-    background-color: #e0e0e0;
+    background-color: #ffffff;
     color: #121212;
 }
 
@@ -178,7 +178,8 @@ body.dark-mode .sidebar .darki {
 }
 
 body.dark-mode .game {
-    background: rgba(240, 240, 240, 0.7);
+    background: #f9f9f9;
+    border: 1px solid #ccc;
 }
 
 .game:hover {

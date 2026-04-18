@@ -28,9 +28,21 @@ form.addEventListener("submit", async (e) => {
 	const desc = document.getElementById("gameDesc").value.trim();
 	const iconFile = document.getElementById("gameIcon").files[0];
 	const gameFile = document.getElementById("gameFile").files[0];
+	const maxPlayers = parseInt(document.getElementById("maxPlayers").value) || 10;
+	const minPlayers = parseInt(document.getElementById("minPlayers").value) || 1;
 
 	if (!name || !desc || !iconFile || !gameFile) {
 		alert("Please fill all fields and select files.");
+		return;
+	}
+
+	if (minPlayers < 1) {
+		alert("Minimum players must be at least 1.");
+		return;
+	}
+
+	if (maxPlayers < minPlayers) {
+		alert("Maximum players cannot be less than minimum players.");
 		return;
 	}
 
@@ -101,7 +113,12 @@ form.addEventListener("submit", async (e) => {
 			description: desc,
 			icon: iconUrlHttp,
 			file: gameUrlHttp,
-			creator: username
+			creator: username,
+			max_players: maxPlayers,
+			min_players: minPlayers,
+			created_at: Date.now(),
+			total_plays: 0,
+			active_players: 0
 		});
 
 		alert("Game uploaded successfully!");

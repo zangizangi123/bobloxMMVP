@@ -32,11 +32,13 @@ window.addEventListener("DOMContentLoaded", () => {
     const yesBtn = confirm?.querySelector(".yes");
     const noBtn = confirm?.querySelector(".no");
     const shirtsGrid = document.getElementById("shirtsGrid");
+    const facesGrid = document.getElementById("facesGrid");
 
     let currentUserBobux = 0;
     let currentUserEmail = "";
-    let selectedShirt = null;
-    let selectedShirtKey = null;
+    let selectedItem = null;
+    let selectedItemKey = null;
+    let selectedItemType = null; // "shirt" or "face"
 
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (isLoggedIn !== "true") {
@@ -111,68 +113,82 @@ window.addEventListener("DOMContentLoaded", () => {
             });
     }
 
+    // Generic function to render cards into a grid
+    function renderCards(grid, entries, type) {
+        grid.innerHTML = '';
+        entries.forEach(([key, item]) => {
+            const card = document.createElement('div');
+            card.className = 'shirt-card';
+            const price = item.price || 0;
+            const priceText = price === 0 ? 'Free' : `${price} Bobux`;
+
+            card.innerHTML = `
+                <img src="${item.image}" alt="${item.name}">
+                <h3>${item.name}</h3>
+                <p class="price">${priceText}</p>
+            `;
+
+            card.addEventListener('click', () => {
+                selectedItem = item;
+                selectedItemKey = key;
+                selectedItemType = type;
+                showPurchaseModal(item, type);
+            });
+
+            grid.appendChild(card);
+        });
+    }
+
     async function loadShirts() {
         shirtsGrid.innerHTML = '<div class="loading">Loading shirts...</div>';
-        
         try {
-            const shirtsRef = ref(db, 'shirts');
-            const snapshot = await get(shirtsRef);
-            
+            const snapshot = await get(ref(db, 'shirts'));
             if (snapshot.exists()) {
-                const shirts = snapshot.val();
-                const shirtsEntries = Object.entries(shirts);
-                
-                if (shirtsEntries.length === 0) {
+                const entries = Object.entries(snapshot.val());
+                if (entries.length === 0) {
                     shirtsGrid.innerHTML = '<div class="no-shirts">No shirts available yet.</div>';
-                    return;
+                } else {
+                    renderCards(shirtsGrid, entries, 'shirt');
                 }
-                
-                shirtsGrid.innerHTML = '';
-                
-                shirtsEntries.forEach(([key, shirt]) => {
-                    const shirtCard = document.createElement('div');
-                    shirtCard.className = 'shirt-card';
-                    const price = shirt.price || 0;
-                    const priceText = price === 0 ? 'Free' : `${price} Bobux`;
-                    
-                    shirtCard.innerHTML = `
-                        <img src="${shirt.image}" alt="${shirt.name}">
-                        <h3>${shirt.name}</h3>
-                        <p class="price">${priceText}</p>
-                        <p class="creator">by ${shirt.creator}</p>
-                    `;
-                    
-                    shirtCard.addEventListener('click', () => {
-                        selectedShirt = shirt;
-                        selectedShirtKey = key;
-                        showPurchaseModal(shirt);
-                    });
-                    
-                    shirtsGrid.appendChild(shirtCard);
-                });
             } else {
                 shirtsGrid.innerHTML = '<div class="no-shirts">No shirts available yet.</div>';
             }
         } catch (error) {
             console.error("Error loading shirts:", error);
-            shirtsGrid.innerHTML = '<div class="no-shirts">Error loading shirts. Please try again.</div>';
+            shirtsGrid.innerHTML = '<div class="no-shirts">Error loading shirts.</div>';
         }
     }
 
-    function showPurchaseModal(shirt) {
-        const purchaseShirtImage = document.getElementById("purchaseShirtImage");
-        const purchaseShirtName = document.getElementById("purchaseShirtName");
-        const purchaseShirtPrice = document.getElementById("purchaseShirtPrice");
-        const purchaseShirtCreator = document.getElementById("purchaseShirtCreator");
-        
-        const price = shirt.price || 0;
+    async function loadFaces() {
+        facesGrid.innerHTML = '<div class="loading">Loading faces...</div>';
+        try {
+            const snapshot = await get(ref(db, 'faces'));
+            if (snapshot.exists()) {
+                const entries = Object.entries(snapshot.val());
+                if (entries.length === 0) {
+                    facesGrid.innerHTML = '<div class="no-shirts">No faces available yet.</div>';
+                } else {
+                    renderCards(facesGrid, entries, 'face');
+                }
+            } else {
+                facesGrid.innerHTML = '<div class="no-shirts">No faces available yet.</div>';
+            }
+        } catch (error) {
+            console.error("Error loading faces:", error);
+            facesGrid.innerHTML = '<div class="no-shirts">Error loading faces.</div>';
+        }
+    }
+
+    function showPurchaseModal(item, type) {
+        const price = item.price || 0;
         const priceText = price === 0 ? 'Free' : `${price} Bobux`;
-        
-        purchaseShirtImage.src = shirt.image;
-        purchaseShirtName.textContent = shirt.name;
-        purchaseShirtPrice.textContent = `Price: ${priceText}`;
-        purchaseShirtCreator.textContent = `Creator: ${shirt.creator}`;
-        
+        const label = type === 'face' ? 'Face' : 'Shirt';
+
+        document.getElementById("purchaseTitle").textContent = `Purchase ${label}?`;
+        document.getElementById("purchaseItemImage").src = item.image;
+        document.getElementById("purchaseItemName").textContent = item.name;
+        document.getElementById("purchaseItemPrice").textContent = `Price: ${priceText}`;
+
         purchaseContainer.style.display = "flex";
         purchaseConfirm.style.opacity = "1";
         purchaseConfirm.style.pointerEvents = "auto";
@@ -195,102 +211,123 @@ window.addEventListener("DOMContentLoaded", () => {
         }, 300);
     }
 
-    async function purchaseShirt() {
-        if (!selectedShirt || !currentUserEmail || !selectedShirtKey) {
+    async function purchaseItem() {
+        if (!selectedItem || !currentUserEmail || !selectedItemKey) {
             alert("Unable to process purchase. Please try again.");
             closePurchaseModal();
             return;
         }
-        
-        const shirtPrice = selectedShirt.price || 0;
-        
-        if (shirtPrice > 0 && currentUserBobux < shirtPrice) {
+
+        const itemPrice = selectedItem.price || 0;
+
+        if (itemPrice > 0 && currentUserBobux < itemPrice) {
             alert("Not enough Bobux!");
             closePurchaseModal();
             return;
         }
-        
+
         try {
             const emailKey = emailToKey(currentUserEmail);
             const userRef = ref(db, `users/${emailKey}`);
             const snapshot = await get(userRef);
-            
+
             if (!snapshot.exists()) {
                 alert("User data not found. Please try logging in again.");
                 closePurchaseModal();
                 return;
             }
-            
+
             const userData = snapshot.val();
-            let ownedShirts = userData.ownedShirts;
-            
-            if (!ownedShirts || typeof ownedShirts !== 'object') {
-                ownedShirts = [];
-            } else if (!Array.isArray(ownedShirts)) {
-                ownedShirts = Object.values(ownedShirts);
-            }
-            
-            if (ownedShirts.includes(selectedShirtKey)) {
-                alert("You already own this shirt!");
-                closePurchaseModal();
-                return;
-            }
-            
-            ownedShirts.push(selectedShirtKey);
-            const updateData = {
-                ownedShirts: ownedShirts,
-                currentShirt: selectedShirtKey
-            };
-            
-            if (shirtPrice > 0) {
-                const newBobux = currentUserBobux - shirtPrice;
-                updateData.bobux = newBobux;
-                
-                if (selectedShirt.creatorEmail && selectedShirt.creatorEmail !== currentUserEmail) {
-                    try {
-                        const creatorEmailKey = emailToKey(selectedShirt.creatorEmail);
-                        const creatorRef = ref(db, `users/${creatorEmailKey}`);
-                        const creatorSnapshot = await get(creatorRef);
-                        
-                        if (creatorSnapshot.exists()) {
-                            const creatorData = creatorSnapshot.val();
-                            const creatorCurrentBobux = creatorData.bobux || 0;
-                            const creatorNewBobux = creatorCurrentBobux + shirtPrice;
-                            
-                            await update(creatorRef, {
-                                bobux: creatorNewBobux
-                            });
-                        }
-                    } catch (creatorError) {
-                        console.error("Error updating creator bobux:", creatorError);
-                    }
+
+            if (selectedItemType === 'shirt') {
+                let ownedShirts = userData.ownedShirts;
+                if (!ownedShirts || typeof ownedShirts !== 'object') {
+                    ownedShirts = [];
+                } else if (!Array.isArray(ownedShirts)) {
+                    ownedShirts = Object.values(ownedShirts);
+                }
+
+                if (ownedShirts.includes(selectedItemKey)) {
+                    alert("You already own this shirt!");
+                    closePurchaseModal();
+                    return;
+                }
+
+                ownedShirts.push(selectedItemKey);
+                const updateData = { ownedShirts, currentShirt: selectedItemKey };
+
+                if (itemPrice > 0) {
+                    updateData.bobux = currentUserBobux - itemPrice;
+                    await payCreator(selectedItem, itemPrice);
+                }
+
+                await update(userRef, updateData);
+                if (itemPrice > 0) {
+                    currentUserBobux = updateData.bobux;
+                    document.getElementById("bobux").textContent = `Bobux: ${currentUserBobux}`;
+                }
+
+            } else if (selectedItemType === 'face') {
+                let ownedFaces = userData.ownedFaces;
+                if (!ownedFaces || typeof ownedFaces !== 'object') {
+                    ownedFaces = [];
+                } else if (!Array.isArray(ownedFaces)) {
+                    ownedFaces = Object.values(ownedFaces);
+                }
+
+                if (ownedFaces.includes(selectedItemKey)) {
+                    alert("You already own this face!");
+                    closePurchaseModal();
+                    return;
+                }
+
+                ownedFaces.push(selectedItemKey);
+                const updateData = { ownedFaces, currentFace: selectedItemKey };
+
+                if (itemPrice > 0) {
+                    updateData.bobux = currentUserBobux - itemPrice;
+                    await payCreator(selectedItem, itemPrice);
+                }
+
+                await update(userRef, updateData);
+                if (itemPrice > 0) {
+                    currentUserBobux = updateData.bobux;
+                    document.getElementById("bobux").textContent = `Bobux: ${currentUserBobux}`;
                 }
             }
-            
-            await update(userRef, updateData);
-            
-            if (shirtPrice > 0) {
-                currentUserBobux = updateData.bobux;
-                document.getElementById("bobux").textContent = `Bobux: ${currentUserBobux}`;
-            }
-            
-            const message = shirtPrice === 0 ? 
-                "Free shirt claimed and equipped successfully!" : 
-                "Shirt purchased and equipped successfully!";
-            alert(message);
+
+            const label = selectedItemType === 'face' ? 'face' : 'shirt';
+            alert(itemPrice === 0 ? `Free ${label} claimed!` : `${label.charAt(0).toUpperCase() + label.slice(1)} purchased successfully!`);
             closePurchaseModal();
+
         } catch (error) {
-            console.error("Error purchasing shirt:", error);
+            console.error("Error purchasing item:", error);
             alert("Purchase failed. Please check your connection and try again.");
             closePurchaseModal();
         }
     }
 
+    async function payCreator(item, price) {
+        if (!item.creatorEmail || item.creatorEmail === currentUserEmail) return;
+        try {
+            const creatorKey = emailToKey(item.creatorEmail);
+            const creatorRef = ref(db, `users/${creatorKey}`);
+            const creatorSnapshot = await get(creatorRef);
+            if (creatorSnapshot.exists()) {
+                const creatorBobux = (creatorSnapshot.val().bobux || 0) + price;
+                await update(creatorRef, { bobux: creatorBobux });
+            }
+        } catch (e) {
+            console.error("Error paying creator:", e);
+        }
+    }
+
     const purchaseYesBtn = purchaseConfirm?.querySelector(".purchase-yes");
     const purchaseNoBtn = purchaseConfirm?.querySelector(".purchase-no");
-    
-    purchaseYesBtn?.addEventListener("click", purchaseShirt);
+
+    purchaseYesBtn?.addEventListener("click", purchaseItem);
     purchaseNoBtn?.addEventListener("click", closePurchaseModal);
 
     loadShirts();
+    loadFaces();
 });

@@ -145,6 +145,16 @@ body.dark-mode .greeting p {
     color: #666;
 }
 
+.section-title {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: white;
+}
+
+body.dark-mode .section-title {
+    color: #121212;
+}
+
 .shirts-container {
     padding: 20px;
 }

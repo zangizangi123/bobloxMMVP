@@ -218,7 +218,7 @@ body.dark-mode .avatar-box {
     object-fit: cover;
 }
 
-#shirtOverlay {
+#faceOverlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -228,6 +228,18 @@ body.dark-mode .avatar-box {
     display: none;
     object-fit: cover;
     z-index: 10;
+}
+
+#shirtOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: none;
+    object-fit: cover;
+    z-index: 20;
 }
 
 .input-group {

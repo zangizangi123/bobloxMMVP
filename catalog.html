@@ -25,12 +25,17 @@
 
         <section class="greeting">
             <h1>Catalog</h1>
-            <p>Browse and purchase shirts</p>
+            <p>Browse and purchase shirts and faces</p>
         </section>
 
         <section class="shirts-container">
-            <div id="shirtsGrid" class="shirts-grid">
-            </div>
+            <h2 class="section-title">Shirts</h2>
+            <div id="shirtsGrid" class="shirts-grid"></div>
+        </section>
+
+        <section class="shirts-container">
+            <h2 class="section-title">Faces</h2>
+            <div id="facesGrid" class="shirts-grid"></div>
         </section>
     </div>
 
@@ -61,11 +66,10 @@
 
     <div class="container purchase-container">
         <div class="confirm purchase-confirm" id="purchaseConfirm">
-            <h2>Purchase Shirt?</h2>
-            <img id="purchaseShirtImage" src="" alt="Shirt">
-            <p id="purchaseShirtName"></p>
-            <p id="purchaseShirtPrice"></p>
-            <p id="purchaseShirtCreator"></p>
+            <h2 id="purchaseTitle">Purchase Item?</h2>
+            <img id="purchaseItemImage" src="" alt="Item">
+            <p id="purchaseItemName"></p>
+            <p id="purchaseItemPrice"></p>
             <button class="btn purchase-yes">Purchase</button>
             <button class="btn purchase-no">Cancel</button>
         </div>
